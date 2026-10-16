@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SE Detector — Live Demo</title>
+<style>
+  :root{
+    --navy:#0B1E3D; --ink:#1A2233; --muted:#6B7280; --line:#D7DEE7; --bg:#F4F7FA; --card:#FFFFFF;
+    --teal:#007F76; --teal-l:#E6F4F2; --red:#E63950; --red-l:#FDECEF;
+    --low:#4B5563; --low-bg:#EEF1F4; --med:#8A5A00; --med-bg:#FFF4D6; --high:#B4480B; --high-bg:#FFE8D9; --crit:#B3122E; --crit-bg:#FDE3E8;
+  }
+  *{box-sizing:border-box} body{margin:0;font:15px/1.45 Calibri,Carlito,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+  header{background:var(--navy);color:#fff;padding:14px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  header h1{font:600 20px Cambria,Caladea,Georgia,serif;margin:0} header .tag{font-size:12px;letter-spacing:.08em;color:#7FE0D6;text-transform:uppercase}
+  header .meta{margin-left:auto;font-size:13px;color:#C9D3E0}
+  main{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:20px;padding:20px;max-width:1280px;margin:0 auto}
+  @media (max-width:860px){main{grid-template-columns:1fr;padding:16px}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px}
+  .chat{display:flex;flex-direction:column;height:calc(100vh - 110px);min-height:520px}
+  .chat h2,.panel h2{font:600 13px Calibri,Carlito,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin:0;padding:14px 16px;border-bottom:1px solid var(--line)}
+  #feed{flex:1;overflow-y:auto;padding:8px 6px}
+  .msg{padding:7px 10px;border-radius:8px;cursor:pointer;display:flex;gap:8px;align-items:flex-start;border-left:3px solid transparent}
+  .msg:hover{background:var(--bg)} .msg.sel{background:var(--teal-l)}
+  .msg .u{font-weight:700;white-space:nowrap} .msg .t{flex:1;word-break:break-word}
+  .msg .b{font-size:11px;font-weight:700;padding:1px 7px;border-radius:9px;white-space:nowrap;margin-top:2px}
+  .msg.MEDIUM{border-left-color:#E0A800} .msg.HIGH{border-left-color:#E8730C} .msg.CRITICAL{border-left-color:var(--red);background:#FFF7F8}
+  .lv-LOW{color:var(--low);background:var(--low-bg)} .lv-MEDIUM{color:var(--med);background:var(--med-bg)}
+  .lv-HIGH{color:var(--high);background:var(--high-bg)} .lv-CRITICAL{color:var(--crit);background:var(--crit-bg)}
+  form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+  input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font:inherit}
+  button{font:600 14px Calibri,Carlito,sans-serif;border:0;border-radius:8px;padding:10px 14px;cursor:pointer;background:var(--teal);color:#fff}
+  button.ghost{background:transparent;color:var(--teal);border:1px solid var(--teal)} button:disabled{opacity:.5;cursor:default}
+  .controls{display:flex;gap:8px;padding:0 12px 12px;flex-wrap:wrap}
+  .panel{padding-bottom:12px} .panel .body{padding:16px}
+  .empty{color:var(--muted);padding:40px 16px;text-align:center}
+  .quote{background:var(--bg);border-radius:8px;padding:12px 14px;font-size:16px;margin-bottom:16px;word-break:break-word}
+  .verdict{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  .lvl{font:700 22px Cambria,Caladea,serif;padding:6px 16px;border-radius:8px}
+  .score{font-size:14px;color:var(--muted)} .score b{font-size:28px;color:var(--ink);font-variant-numeric:tabular-nums}
+  .meter{position:relative;height:10px;border-radius:5px;background:linear-gradient(90deg,#EEF1F4 0 18%,#FFF4D6 18% 60%,#FFE8D9 60% 80%,#FDE3E8 80%);margin:6px 0 20px}
+  .meter i{position:absolute;top:-4px;width:4px;height:18px;border-radius:2px;background:var(--ink)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px} @media (max-width:640px){.grid{grid-template-columns:1fr}}
+  h3{font:600 12px Calibri,Carlito,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+  .chip{display:inline-block;font-size:13px;font-weight:700;padding:3px 10px;border-radius:12px;margin:0 6px 6px 0}
+  .chip.t{background:var(--red-l);color:var(--crit)} .chip.p{background:var(--teal-l);color:var(--teal)} .chip.n{background:var(--bg);color:var(--muted)}
+  ul.ev{margin:0;padding-left:18px;font-size:14px} ul.ev li{margin-bottom:3px} ul.ev code{background:var(--bg);padding:0 4px;border-radius:4px;font:13px Consolas,"DejaVu Sans Mono",monospace}
+  .bar{display:grid;grid-template-columns:150px 1fr 48px;gap:8px;align-items:center;font-size:14px;margin-bottom:6px}
+  .bar .track{height:10px;background:var(--bg);border-radius:5px;overflow:hidden} .bar .fill{height:100%;background:var(--teal);border-radius:0 5px 5px 0}
+  .bar .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+  .alert{border:1px solid var(--red);background:var(--red-l);border-radius:8px;padding:12px 14px;margin-bottom:16px}
+  .alert b{color:var(--crit)}
+  .foot{font-size:12px;color:var(--muted);margin-top:14px}
+  .stats{display:flex;gap:16px;padding:0 16px 4px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="tag">J26-CS-337 · Component 4</div><h1>Social Engineering Attack Detection</h1></div>
+  <div class="meta" id="meta">connecting…</div>
+</header>
+<main>
+  <section class="card chat">
+    <h2>Live stream chat</h2>
+    <div class="stats"><span id="st-n">0 messages</span><span id="st-f">0 flagged</span><span id="st-a">0 alerts</span><span id="st-l">– ms avg</span></div>
+    <div id="feed"></div>
+    <div class="controls">
+      <button class="ghost" id="play" type="button">▶ Play demo scenario</button>
+      <button class="ghost" id="clear" type="button">Clear</button>
+    </div>
+    <form id="f"><input id="in" placeholder="Type a chat message as a viewer…" autocomplete="off" maxlength="2000"><button>Send</button></form>
+  </section>
+  <section class="card panel">
+    <h2>Moderator view — why was this flagged?</h2>
+    <div class="body" id="detail"><div class="empty">Send a message or play the demo scenario, then click any message to see the analysis.</div></div>
+  </section>
+</main>
+<script>
+const SCENARIO = [
+  ["kavi_99","lets goooo that clutch was insane"],
+  ["nethmi.lk","what settings do you use for the graphics?"],
+  ["gamer_x","stream starting in 5 minutes for part 2, grab snacks!"],
+  ["n1tro_drops","FR33 DISC0RD N1TRO for everyone in chat!! claim before it runs out: dlscord-gifts.xyz/claim"],
+  ["sahan_23","PSA: there are scammers sending fake nitro links, don't click them"],
+  ["TwitchSupport_","Hi, I'm from Twitch Trust & Safety. Your channel was reported for a violation. Verify your account in the next 30 minutes or it will be permanently banned: twitch-verify-support.com"],
+  ["dilan","mods please ban that spammer"],
+  ["event_team","hey can you do me a favor? I'm the event organiser and need the 6 digit code that was just sent to your phone"],
+  ["crypto_king","Double your Bitcoin! Send 0.05 BTC to this wallet and get 0.1 back instantly, only 5 spots left"],
+  ["ishara","I'm so scared of this boss fight omg"],
+];
+const results = {}; let n=0, flagged=0, alerts=0, latSum=0, sel=null;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $ = id => document.getElementById(id);
+
+fetch("/health").then(r=>r.json()).then(h=>{
+  $("meta").textContent = `model v${h.model_version} · threshold τ=${h.threshold} · weights P ${h.weights.P}, U ${h.weights.U}, A ${h.weights.A}, F ${h.weights.F}, R ${h.weights.R}`;
+}).catch(()=>{$("meta").textContent="API offline — start: uvicorn se_detector.api:app"});
+
+async function send(user, text){
+  const id = "m" + (++n);
+  const row = document.createElement("div");
+  row.className = "msg"; row.dataset.id = id;
+  row.innerHTML = `<span class="u" style="color:${color(user)}">${esc(user)}</span><span class="t">${esc(text)}</span><span class="b lv-LOW">…</span>`;
+  row.onclick = () => show(id);
+  $("feed").appendChild(row); $("feed").scrollTop = 1e9;
+  try{
+    const r = await fetch("/analyze",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({text, message_id:id, user_id:"u_"+hash(user), channel_id:"demo"})});
+    if(!r.ok) throw new Error(r.status);
+    const res = await r.json(); results[id] = {res, user, text};
+    const lv = res.severity.level;
+    row.classList.add(lv);
+    row.querySelector(".b").className = "b lv-"+lv; row.querySelector(".b").textContent = lv;
+    latSum += res.latency_ms; if(res.is_social_engineering) flagged++; if(res.alert) alerts++;
+    $("st-n").textContent = `${n} messages`; $("st-f").textContent = `${flagged} flagged`;
+    $("st-a").textContent = `${alerts} alerts`; $("st-l").textContent = `${(latSum/n).toFixed(1)} ms avg`;
+    if(res.alert || sel===null) show(id);
+  }catch(e){ row.querySelector(".b").textContent = "error"; }
+}
+
+function show(id){
+  const d = results[id]; if(!d) return;
+  document.querySelectorAll(".msg.sel").forEach(e=>e.classList.remove("sel"));
+  document.querySelector(`.msg[data-id="${id}"]`)?.classList.add("sel"); sel = id;
+  const r = d.res, s = r.severity, lv = s.level;
+  const tactics = r.manipulation.tactics.length ? r.manipulation.tactics.map(t=>`<span class="chip t">${esc(t)}</span>`).join("") : `<span class="chip n">none detected</span>`;
+  const pats = r.patterns.detected.length ? r.patterns.detected.map(p=>`<span class="chip p">${esc(p.replace(/_/g," "))}</span>`).join("") : `<span class="chip n">none detected</span>`;
+  const ev = r.manipulation.tactics.flatMap(t => r.manipulation.evidence.filter(e=>e.tactic===t).sort((a,b)=>b.weight-a.weight).slice(0,2))
+      .map(e=>`<li><b>${esc(e.tactic)}</b> — ${esc(e.cue)}: <code>${esc(e.match)}</code></li>`).join("");
+  const pev = Object.entries(r.patterns.evidence).map(([k,v])=>`<li><b>${esc(k.replace(/_/g," "))}</b>: ${v.slice(0,3).map(x=>`<code>${esc(x)}</code>`).join(", ")}</li>`).join("");
+  const names = {P:"Text model (P)",U:"Urgency (U)",A:"Authority (A)",F:"Fear (F)",R:"Pattern risk (R)"};
+  const bars = Object.entries(s.contributions).map(([k,v])=>`<div class="bar"><span>${names[k]}</span><div class="track"><div class="fill" style="width:${Math.min(100,v/0.45*100)}%"></div></div><span class="v">+${v.toFixed(3)}</span></div>`).join("");
+  $("detail").innerHTML = `
+    <div class="quote"><b>${esc(d.user)}:</b> ${esc(d.text)}</div>
+    ${r.alert ? `<div class="alert"><b>⚠ ALERT — ${esc(r.alert.level)}</b><br>${esc(r.alert.summary)}<br>Recommended action: <b>${esc(r.alert.recommended_action)}</b></div>` : ""}
+    <div class="verdict"><span class="lvl lv-${lv}">${lv}</span>
+      <span class="score">Severity S = <b>${s.score.toFixed(2)}</b> &nbsp;·&nbsp; ${r.is_social_engineering ? "flagged as social engineering" : "not flagged"} (τ = ${s.threshold})</span></div>
+    <div class="meter"><i style="left:calc(${Math.min(1,s.score)*100}% - 2px)"></i></div>
+    <div class="grid">
+      <div><h3>Manipulation tactics</h3>${tactics}<ul class="ev">${ev}</ul></div>
+      <div><h3>Attack patterns</h3>${pats}<ul class="ev">${pev}</ul></div>
+    </div>
+    <h3 style="margin-top:18px">What contributed to S = Σ wᵢ·xᵢ</h3>${bars}
+    <div class="foot">Phishing probability P = ${r.phishing_probability.toFixed(3)} · URLs forwarded to URL-verification component: ${r.urls.length ? r.urls.map(esc).join(", ") : "none"} · analysed in ${r.latency_ms} ms · model v${esc(r.model_version)}</div>`;
+}
+function hash(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h.toString(16)}
+function color(u){const c=["#007F76","#0B5CAD","#7A3EB1","#B4480B","#2F6B2F","#B3122E"];return c[parseInt(hash(u),16)%c.length]}
+$("f").onsubmit = e => { e.preventDefault(); const v=$("in").value.trim(); if(v){ send("you", v); $("in").value=""; } };
+$("play").onclick = async () => { $("play").disabled = true; for(const [u,t] of SCENARIO){ await send(u,t); await new Promise(r=>setTimeout(r,900)); } $("play").disabled = false; };
+$("clear").onclick = () => { $("feed").innerHTML=""; $("detail").innerHTML='<div class="empty">Cleared.</div>'; n=flagged=alerts=latSum=0; sel=null; ["st-n","st-f","st-a"].forEach(i=>$(i).textContent="0"); };
+</script>
+</body>
+</html>
