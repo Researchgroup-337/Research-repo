@@ -118,3 +118,19 @@ def detect(text: str, urls: list[str] | None = None) -> dict:
         total += 0.5
     risk = round(1 - math.exp(-0.6 * total), 4)
     return {"risk": risk, "patterns": sorted(found), "evidence": found, "url_risk": link}
+
+
+# --- Protective advice (added by D.M.T. Dissanayaka, v0.5.0) -----------------
+# Moderators and viewers often WARN others about scams ("PSA: don't click fake
+# nitro links", "never share your password"). These mention scam words but are
+# not attacks, so they are detected here and their risk is damped.
+PROTECTIVE_RE = re.compile(
+    r"\b(?:psa|beware|be careful|watch out|scam(?:mer)?s?|fake|"
+    r"never (?:share|give|send|click|dm)|"
+    r"don'?t (?:click|share|send|give|trust|fall for)|do not (?:click|share|send|give))\b",
+    re.IGNORECASE,
+)
+
+
+def is_protective_advice(text: str) -> bool:
+    return bool(PROTECTIVE_RE.search(text))

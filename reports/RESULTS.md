@@ -1,6 +1,6 @@
 # Evaluation results
 
-Model version 0.4.0. Weights {'P': 0.4612, 'U': 0.1224, 'A': 0.1144, 'F': 0.0935, 'R': 0.2086}, threshold tau=0.18.
+Model version 0.4.0. Weights {'P': 0.4596, 'U': 0.1228, 'A': 0.1156, 'F': 0.0903, 'R': 0.2118}, threshold tau=0.17.
 Test-set sizes: {'sms_test': 738, 'chat_test': 80, 'zenodo_test': 87}
 
 ## Detection (held-out test sets)
@@ -9,13 +9,13 @@ Test-set sizes: {'sms_test': 738, 'chat_test': 80, 'zenodo_test': 87}
 |---|---|---|---|---|---|---|---|
 | E1 TF-IDF+LR (text only) | 0.957 | 0.009 | 1.000 | 0.000 | 0.822 | 0.750 | 0.075 |
 | E2 TF-IDF+SVM (text only) | 0.958 | 0.011 | 0.984 | 0.083 | 0.853 | 0.800 | 0.075 |
-| E4 Proposed hybrid (P+U+A+F+R) | 0.933 | 0.019 | 0.977 | 0.125 | 0.940 | 0.975 | 0.100 |
-| E5 without urgency | 0.938 | 0.017 | 0.977 | 0.125 | 0.927 | 0.950 | 0.100 |
-| E5 without authority | 0.938 | 0.017 | 0.977 | 0.125 | 0.952 | 1.000 | 0.100 |
-| E5 without fear | 0.938 | 0.017 | 0.977 | 0.125 | 0.927 | 0.950 | 0.100 |
-| E5 without all manipulation (P+R) | 0.943 | 0.015 | 0.977 | 0.125 | 0.914 | 0.925 | 0.100 |
-| E5 without pattern risk (P+U+A+F) | 0.948 | 0.014 | 0.984 | 0.083 | 0.897 | 0.875 | 0.075 |
-| E5 rules only (U+A+F+R, no text model) | 0.755 | 0.054 | 0.919 | 0.167 | 0.930 | 1.000 | 0.150 |
+| E4 Proposed hybrid (P+U+A+F+R) | 0.933 | 0.019 | 0.977 | 0.125 | 0.976 | 1.000 | 0.050 |
+| E5 without urgency | 0.938 | 0.017 | 0.977 | 0.125 | 0.950 | 0.950 | 0.050 |
+| E5 without authority | 0.933 | 0.019 | 0.977 | 0.125 | 0.976 | 1.000 | 0.050 |
+| E5 without fear | 0.938 | 0.017 | 0.977 | 0.125 | 0.950 | 0.950 | 0.050 |
+| E5 without all manipulation (P+R) | 0.943 | 0.015 | 0.977 | 0.125 | 0.937 | 0.925 | 0.050 |
+| E5 without pattern risk (P+U+A+F) | 0.953 | 0.012 | 0.984 | 0.083 | 0.909 | 0.875 | 0.050 |
+| E5 rules only (U+A+F+R, no text model) | 0.759 | 0.053 | 0.919 | 0.167 | 0.952 | 1.000 | 0.100 |
 
 ## Manipulation tactic detection (chat test)
 
@@ -31,12 +31,12 @@ Test-set sizes: {'sms_test': 738, 'chat_test': 80, 'zenodo_test': 87}
 |---|---|---|---|
 | baiting | 5 | 1.00 | 0.80 |
 | benign | 21 | 0.00 | 0.00 |
-| benign_hard | 19 | 0.21 | 0.16 |
+| benign_hard | 19 | 0.10 | 0.16 |
 | giveaway_scam | 5 | 1.00 | 1.00 |
 | impersonation | 5 | 1.00 | 0.60 |
 | payment_scam | 6 | 1.00 | 0.33 |
 | phishing | 11 | 1.00 | 1.00 |
-| pretexting | 5 | 0.80 | 0.40 |
+| pretexting | 5 | 1.00 | 0.40 |
 | scareware | 3 | 1.00 | 1.00 |
 
 ## Zenodo test: flag rate by attack type
@@ -61,21 +61,18 @@ Detection recall: proposed 1.00 vs text-only 0.95
 
 ## Latency (single CPU thread, full pipeline)
 
-mean 2.33 ms, p50 2.152 ms, p95 3.734 ms, p99 4.645 ms, throughput 392.5 msg/s (n=898)
+mean 5.009 ms, p50 4.648 ms, p95 8.802 ms, p99 11.135 ms, throughput 236.5 msg/s (n=898)
 
 ## Uncertainty (bootstrap, 2000 resamples of chat test)
 
-Text-only F1 95% CI [0.71, 0.909]; proposed F1 95% CI [0.88, 0.987]; improvement CI [0.035, 0.214] (share of resamples with no improvement: 0.001).
+Text-only F1 95% CI [0.71, 0.909]; proposed F1 95% CI [0.932, 1.0]; improvement CI [0.07, 0.261] (share of resamples with no improvement: 0.0).
 
 ## Error analysis - proposed model mistakes on chat test
 
 | id | type | S | message |
 |---|---|---|---|
-| S079 | FN | 0.171 | quick question, can you tell me the verification code you just got? I typed my number wrong |
-| B006 | FP | 0.279 | remember to verify your email in Discord settings if you want to chat in the server |
-| B008 | FP | 0.307 | the giveaway winner will be announced by the streamer on screen, never DM anyone your details |
+| B006 | FP | 0.278 | remember to verify your email in Discord settings if you want to chat in the server |
 | B012 | FP | 0.276 | the official merch store link is in the description |
-| B019 | FP | 0.2 | PSA: there are scammers sending fake nitro links, don't click them |
 
 ## Authority cues missed (chat test)
 

@@ -23,6 +23,7 @@ from .preprocess import clean
 
 MAX_CHARS = 2000            # chat messages are short; cap protects latency (NFR01) and memory
 COMPONENT = "social_engineering"
+PROTECTIVE_DAMPING = 0.4   # multiply all signals by this for protective advice
 DEFAULT_MODEL = Path(__file__).resolve().parent.parent / "models" / "se_detector.joblib"
 
 
@@ -42,6 +43,9 @@ class SEDetector:
         r = patterns.detect(c.text, c.urls)
         x = {"P": p, "U": m["scores"]["urgency"], "A": m["scores"]["authority"],
              "F": m["scores"]["fear"], "R": r["risk"]}
+                     # Protective advice without a link is a warning, not an attack: damp all signals.
+        if patterns.is_protective_advice(c.text) and not c.urls:
+            x = {k: v * PROTECTIVE_DAMPING for k, v in x.items()}
         return {"clean": c, "x": x, "manipulation": m, "patterns": r}
 
     def analyze(self, message: str, message_id: str | None = None, user_id: str | None = None,
