@@ -1,7 +1,7 @@
 """Train the SE detector and save models/se_detector.joblib.
 
 Usage:
-    python scripts/train.py                                  # SMS corpus only
+    python scripts/train.py                                  # SMS corpus + Zenodo SE dataset (if present)
     python scripts/train.py --extra data/raw/zenodo_se.xlsx  # add more datasets
 
 Steps (proposal 3.3 / 3.5): load -> drop missing -> de-duplicate -> split 70/15/15
@@ -32,6 +32,9 @@ def main():
     args = ap.parse_args()
 
     frames = [data.load_any(ROOT / "data/raw/sms.tsv", "sms_spam_collection")]
+    zenodo = ROOT / "data/raw/zenodo_se_multiclass_sample.xlsx"
+    if zenodo.exists():   # Multiclass NLP Phishing & SE dataset (proposal section 3.2)
+        frames.append(data.load_any(zenodo, "zenodo_se"))
     frames += [data.load_any(p) for p in args.extra]
     df = pd.concat(frames, ignore_index=True)
     split = data.prepare(df)
