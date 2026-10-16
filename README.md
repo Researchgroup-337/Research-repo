@@ -20,7 +20,7 @@ pip install -r requirements.txt
 python scripts/train.py            # trains + saves models/se_detector.joblib
 python scripts/evaluate.py         # baselines, ablation, latency → reports/RESULTS.md
 python scripts/make_figures.py     # charts → reports/fig_*.png
-python -m pytest -q                # 49 tests (48 pass + 1 documented known limitation)
+python -m pytest -q                # 49 tests
 uvicorn se_detector.api:app --port 8004   # open http://localhost:8004 for the live demo
 ```
 
@@ -40,12 +40,13 @@ straddle train/test (see `docs/DATASETS.md`).
 |---|---|---|---|---|---|
 | E1 TF-IDF + LR (text only) | 0.957 | 1.000 | 0.822 | 0.750 | 0.075 |
 | E2 TF-IDF + SVM (text only) | 0.958 | 0.984 | 0.853 | 0.800 | 0.075 |
-| **E4 Proposed hybrid** | 0.933 | 0.977 | **0.940** | **0.975** | 0.100 |
+| **E4 Proposed hybrid** | 0.933 | 0.977 | **0.976** | **1.000** | 0.050 |
 
-Chat F1 gain over text-only: +0.12 (bootstrap 95% CI +0.04 to +0.21). The hybrid trades a little in-domain precision
+Includes the protective-advice detector (scam *warnings* such as "PSA: don't click fake links" are damped).
+Chat F1 gain over text-only: +0.15 (bootstrap 95% CI +0.07 to +0.26). The hybrid trades a little in-domain precision
 (SMS/Zenodo FPR 1.9% / 12.5%) for much higher recall on live-chat attacks. Independent third-party set (79 phishing
 messages): detection recall 1.00 vs 0.95 text-only.
-Latency: p50 2.2 ms, p95 3.7 ms per message on one CPU thread (~390–450 msg/s). Full tables, ablation and error
+Latency: p50 2.3 ms, p95 3.2 ms per message on one CPU thread (~390–450 msg/s). Full tables, ablation and error
 analysis are in `reports/RESULTS.md`.
 
 ## Layout

@@ -25,7 +25,7 @@ uvicorn se_detector.api:app --port 8004      # start before your slot
 2. Point at "I'm so scared of this boss fight" → fear words, but **not** flagged (the tactic is aimed at nobody).
 3. Click the **Twitch Trust & Safety** message → CRITICAL. Read the evidence: urgency "in the next 30 minutes", authority "I'm from Twitch Trust & Safety", fear "permanently banned", the suspicious link, and the URL passed to Gunarathna.
 4. Type a live one: `yo I'm a mod, send me the code you just got or you'll lose your account` → flagged MEDIUM (authority + fear + credential request). This shows severity ranks it below the CRITICAL one, so moderators triage.
-5. If asked for evidence: `python -m pytest -q` (48 pass + 1 known limitation) and `reports/RESULTS.md`.
+5. If asked for evidence: `python -m pytest -q` (49 pass) and `reports/RESULTS.md`.
 
 **Fallback:** `reports/demo_screenshot.png`. Also record a 60-second screen capture of steps 1–4 beforehand.
 
@@ -33,16 +33,17 @@ uvicorn se_detector.api:app --port 8004      # start before your slot
 
 | Question | Answer |
 |---|---|
-| Why not just use a phishing classifier? | Tested it: TF-IDF+LR trained on SMS + Zenodo scores 0.96 on SMS but only 0.82 on chat and misses 1 in 4 chat scams (recall 0.75). My hybrid: F1 0.94, recall 0.975. Gain CI +0.04 to +0.21. |
-| How did you choose the weights? | They weren't chosen by hand. A logistic regression fitted on validation data (SMS + Zenodo validation + chat dev), negative coefficients clipped to 0, normalised to sum 1 → P 0.46, U 0.12, A 0.11, F 0.09, R 0.21. τ = 0.18 tuned for F1 on the same validation set. Test sets are never used. |
+| Why not just use a phishing classifier? | Tested it: TF-IDF+LR trained on SMS + Zenodo scores 0.96 on SMS but only 0.82 on chat and misses 1 in 4 chat scams (recall 0.75). My hybrid: F1 0.976, recall 1.000, FPR 5%. Gain CI +0.07 to +0.26. |
+| How did you choose the weights? | They weren't chosen by hand. A logistic regression fitted on validation data (SMS + Zenodo validation + chat dev), negative coefficients clipped to 0, normalised to sum 1 → P 0.46, U 0.12, A 0.12, F 0.09, R 0.21. τ = 0.17 tuned for F1 on the same validation set. Test sets are never used. |
 | Doesn't the ablation show the tactics don't matter? | At n=80 one message = 1.25 points; the single-tactic differences are noise. The robust result is hybrid vs text-only. Tactics also give the explanation and severity a moderator needs (NFR06). PP2 will test on the larger Zenodo set. |
-| Weakest point? | Authority detection: recall 0.40 on chat and only 4% on the independent third-party set. Attackers imply authority ("This is an official notice from Amazon", "As per HMRC regulations") instead of claiming it. Also: protective advice ("never share your password") gets flagged. Both are my next tasks. |
+| Weakest point? | Authority detection: recall 0.40 on chat and only 4% on the independent third-party set. Attackers imply authority ("This is an official notice from Amazon", "As per HMRC regulations") instead of claiming it. That is my next task. (I already fixed the second weakness: protective advice like "never share your password" was flagged, so I added a protective-advice detector → chat FPR 10% → 5%.) |
 | Isn't the test set biased, since you wrote it? | Partly, so I added two independent sets: the Zenodo dataset and a third-party tactic-labelled set. Also: dev/test split, rules tuned only on dev, bootstrap CIs. Next: second annotator + Cohen's κ. |
 | Why is Zenodo F1 so high? | It was 1.000 at first because 43% of test messages had a near-copy in training. I fixed the split (near-duplicate groups) so leakage is 0%. The text model still scores 1.000 there because Zenodo messages are short and formulaic; chat is the harder, more realistic test. |
-| Why is the hybrid slightly worse on SMS/Zenodo? | Trade-off: rule signals add recall on chat (+22.5 points) but cause a few extra false positives in-domain (SMS FPR 0.9% → 1.9%). For moderation, missing a scam is worse than one extra review. |
+| Why is the hybrid slightly worse on SMS/Zenodo? | Trade-off: rule signals add recall on chat (+25 points) but cause a few extra false positives in-domain (SMS FPR 0.9% → 1.9%). For moderation, missing a scam is worse than one extra review. |
 | Did you use all your datasets? | No. I audited three and rejected one: 20,000 rows but only 3 distinct sentences. |
 | Why TF-IDF and not DistilBERT already? | It's a baseline the proposal requires, 1.6 MB and 3 ms. DistilBERT is scripted with the same interface; it needs a GPU (Colab) and is the PP2 deliverable. |
 | How does it connect to the others? | JSON contract: URLs → Gunarathna; severity + tactics per pseudonymous user → Jayarathna's risk score; alert + evidence → dashboard. |
 | Privacy/security? | Local only, no text stored, pseudonymous ids, input caps, HTML escaping in the UI, localhost binding. |
 | Grooming (TAF)? | Out of PP1 scope; the off-platform/secrecy pattern ("move to DMs", "don't tell anyone") is the first building block. Needs ethics approval and specialist data. |
+| What did you build yourself? | The protective-advice detector: I found from error analysis that warnings like "PSA: don't click fake links" were flagged, wrote `is_protective_advice()` in patterns.py and the damping in pipeline.py, and showed chat FPR fell 10% → 5% with no attacks missed. |
 | How did you use AI? | (Your honest answer from the AI-use log: what it generated, what you changed, how you verified it.) |

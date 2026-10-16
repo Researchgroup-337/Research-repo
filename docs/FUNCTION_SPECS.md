@@ -34,6 +34,6 @@
 | SO1 data | loader + cleaning + audit | rows, duplicates, leakage | 3 datasets audited (1 rejected); SMS 5,159 + Zenodo 609 after de-dup; near-duplicate-grouped split → 0% train/test leakage |
 | SO2 classifier | F1 text model | F1, FPR | SMS F1 0.957, Zenodo F1 1.000, chat F1 0.822 |
 | SO3 tactics | F1 manipulation detector | per-tactic P/R/F1 | chat test: urgency F1 0.89, fear 0.93, authority 0.57; third-party set: authority found in only 4% → main weakness |
-| SO4 hybrid | F1 + F2 | chat F1 vs text-only | 0.822 → 0.940, recall 0.75 → 0.975 (gain CI +0.04 to +0.21) |
-| SO5 severity | F2 | level distribution, alerts | chat attacks: 18/40 HIGH/CRITICAL alerts, 21 MEDIUM; validation vs expert labels planned |
-| SO6 comparison | evaluate.py | F1, FPR, FNR, latency | E1/E2 baselines, ablation, 4 test sets, p95 latency 3.7 ms |
+| SO4 hybrid | F1 + F2 | chat F1 vs text-only | 0.822 → 0.976, recall 0.75 → 1.000, FPR 0.075 → 0.050 (gain CI +0.07 to +0.26), incl. protective-advice detector |
+| SO5 severity | F2 | level distribution, alerts | chat attacks: 18/40 HIGH/CRITICAL alerts, 22 MEDIUM, 0 missed; validation vs expert labels planned |
+| SO6 comparison | evaluate.py | F1, FPR, FNR, latency | E1/E2 baselines, ablation, 4 test sets, p95 latency 3.2 ms |
