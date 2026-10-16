@@ -26,7 +26,7 @@ from pydantic import BaseModel, Field
 from .pipeline import MAX_CHARS, SEDetector
 
 STATIC = Path(__file__).resolve().parent / "static"
-app = FastAPI(title="J26-CS-337 Social Engineering Detector", version="0.3.0")
+app = FastAPI(title="J26-CS-337 Social Engineering Detector", version="0.4.0")
 detector = SEDetector()
 ALERTS: deque = deque(maxlen=100)
 

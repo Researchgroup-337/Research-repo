@@ -1,22 +1,27 @@
 {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "weights": {
-    "P": 0.392,
-    "U": 0.0861,
-    "A": 0.1667,
-    "F": 0.1342,
-    "R": 0.221
+    "P": 0.4612,
+    "U": 0.1224,
+    "A": 0.1144,
+    "F": 0.0935,
+    "R": 0.2086
   },
   "tau": 0.18,
   "data": {
-    "raw_rows": 5574,
+    "per_source": {
+      "sms_spam_collection": 5159,
+      "zenodo_se": 609
+    },
+    "raw_rows": 6198,
     "missing_removed": 0,
-    "duplicates_removed": 415,
-    "final_rows": 5159,
-    "positive_rate": 0.1244,
-    "train": 3611,
-    "val": 774,
-    "test": 774
+    "duplicates_removed": 430,
+    "final_rows": 5768,
+    "near_duplicate_groups": 5400,
+    "positive_rate": 0.1872,
+    "train": 4119,
+    "val": 824,
+    "test": 825
   },
-  "weight_fit_samples": 854
+  "weight_fit_samples": 904
 }

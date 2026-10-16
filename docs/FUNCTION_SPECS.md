@@ -10,7 +10,7 @@
 | **Processing logic** | 1) preprocessing: Unicode NFKC, URL extraction, emoji removal, de-leet ("n1tro" → "nitro"), stretched-word folding · 2) text classifier: TF-IDF word + char n-grams → logistic regression → P · 3) manipulation detector: weighted cue lexicons for urgency / authority / fear → U, A, F with matched evidence · 4) pattern detector: credential request, account verification, reward bait, payment request, call to action, off-platform/secrecy, suspicious link → R |
 | **Output** | P, U, A, F, R, tactics present, patterns, evidence spans, extracted URLs |
 | **Dependency** | Data Acquisition layer (input stream); forwards URLs to Gunarathna's URL verification |
-| **Test evidence** | 45 automated tests (`pytest`), held-out evaluation in `reports/RESULTS.md`, live demo page |
+| **Test evidence** | 49 automated tests (`pytest`), held-out evaluation on 4 test sets in `reports/RESULTS.md`, live demo page |
 | **Objective** | SO1, SO2, SO3 |
 
 ## Function 2: Severity scoring + moderator alert (status: working; DistilBERT upgrade in progress)
@@ -31,9 +31,9 @@
 
 | Objective | Function | Metric | PP1 evidence |
 |---|---|---|---|
-| SO1 data | loader + cleaning | rows, duplicates removed, split sizes | 5,574 → 5,159 after removing 415 duplicates; 70/15/15 stratified split |
-| SO2 classifier | F1 text model | F1, FPR | SMS test F1 0.973, FPR 0.000 |
-| SO3 tactics | F1 manipulation detector | per-tactic P/R/F1 | urgency F1 0.89, fear 0.93, authority 0.57 (chat test) |
-| SO4 hybrid | F1 + F2 | chat F1 vs text-only | 0.667 → 0.923 (95% CI of the gain +0.13 to +0.40) |
-| SO5 severity | F2 | level distribution, alerts | severity bands working; validation vs expert labels planned |
-| SO6 comparison | evaluate.py | F1, FPR, FNR, latency | E1/E2 baselines, ablation, p95 latency 3.7 ms |
+| SO1 data | loader + cleaning + audit | rows, duplicates, leakage | 3 datasets audited (1 rejected); SMS 5,159 + Zenodo 609 after de-dup; near-duplicate-grouped split → 0% train/test leakage |
+| SO2 classifier | F1 text model | F1, FPR | SMS F1 0.957, Zenodo F1 1.000, chat F1 0.822 |
+| SO3 tactics | F1 manipulation detector | per-tactic P/R/F1 | chat test: urgency F1 0.89, fear 0.93, authority 0.57; third-party set: authority found in only 4% → main weakness |
+| SO4 hybrid | F1 + F2 | chat F1 vs text-only | 0.822 → 0.940, recall 0.75 → 0.975 (gain CI +0.04 to +0.21) |
+| SO5 severity | F2 | level distribution, alerts | chat attacks: 18/40 HIGH/CRITICAL alerts, 21 MEDIUM; validation vs expert labels planned |
+| SO6 comparison | evaluate.py | F1, FPR, FNR, latency | E1/E2 baselines, ablation, 4 test sets, p95 latency 3.7 ms |

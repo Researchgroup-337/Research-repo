@@ -2,294 +2,210 @@
   "models": {
     "E1 TF-IDF+LR (text only)": {
       "sms_test": {
-        "accuracy": 0.9935,
-        "precision": 1.0,
-        "recall": 0.9479,
-        "f1": 0.9733,
-        "fpr": 0.0,
-        "fnr": 0.0521,
+        "accuracy": 0.9892,
+        "precision": 0.9375,
+        "recall": 0.9783,
+        "f1": 0.9574,
+        "fpr": 0.0093,
+        "fnr": 0.0217,
         "cm": [
           [
-            678,
-            0
+            640,
+            6
           ],
           [
-            5,
-            91
+            2,
+            90
           ]
         ]
       },
       "chat_test": {
-        "accuracy": 0.75,
-        "precision": 1.0,
-        "recall": 0.5,
-        "f1": 0.6667,
-        "fpr": 0.0,
-        "fnr": 0.5,
+        "accuracy": 0.8375,
+        "precision": 0.9091,
+        "recall": 0.75,
+        "f1": 0.8219,
+        "fpr": 0.075,
+        "fnr": 0.25,
         "cm": [
           [
-            40,
+            37,
+            3
+          ],
+          [
+            10,
+            30
+          ]
+        ]
+      },
+      "zenodo_test": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "fpr": 0.0,
+        "fnr": 0.0,
+        "cm": [
+          [
+            24,
             0
           ],
           [
-            20,
-            20
+            0,
+            63
           ]
         ]
       }
     },
     "E2 TF-IDF+SVM (text only)": {
       "sms_test": {
-        "accuracy": 0.9935,
-        "precision": 1.0,
-        "recall": 0.9479,
-        "f1": 0.9733,
-        "fpr": 0.0,
-        "fnr": 0.0521,
+        "accuracy": 0.9892,
+        "precision": 0.9286,
+        "recall": 0.9891,
+        "f1": 0.9579,
+        "fpr": 0.0108,
+        "fnr": 0.0109,
         "cm": [
           [
-            678,
-            0
+            639,
+            7
           ],
           [
-            5,
+            1,
             91
           ]
         ]
       },
       "chat_test": {
-        "accuracy": 0.7375,
-        "precision": 1.0,
-        "recall": 0.475,
-        "f1": 0.6441,
-        "fpr": 0.0,
-        "fnr": 0.525,
+        "accuracy": 0.8625,
+        "precision": 0.9143,
+        "recall": 0.8,
+        "f1": 0.8533,
+        "fpr": 0.075,
+        "fnr": 0.2,
         "cm": [
           [
-            40,
-            0
+            37,
+            3
           ],
           [
-            21,
-            19
+            8,
+            32
+          ]
+        ]
+      },
+      "zenodo_test": {
+        "accuracy": 0.977,
+        "precision": 0.9692,
+        "recall": 1.0,
+        "f1": 0.9844,
+        "fpr": 0.0833,
+        "fnr": 0.0,
+        "cm": [
+          [
+            22,
+            2
+          ],
+          [
+            0,
+            63
           ]
         ]
       }
     },
     "E4 Proposed hybrid (P+U+A+F+R)": {
       "sms_test": {
-        "accuracy": 0.9948,
-        "precision": 0.9894,
-        "recall": 0.9688,
-        "f1": 0.9789,
-        "fpr": 0.0015,
-        "fnr": 0.0312,
+        "accuracy": 0.9824,
+        "precision": 0.8835,
+        "recall": 0.9891,
+        "f1": 0.9333,
+        "fpr": 0.0186,
+        "fnr": 0.0109,
         "cm": [
           [
-            677,
-            1
+            634,
+            12
           ],
           [
-            3,
-            93
+            1,
+            91
           ]
         ]
       },
       "chat_test": {
-        "accuracy": 0.925,
-        "precision": 0.9474,
-        "recall": 0.9,
-        "f1": 0.9231,
-        "fpr": 0.05,
-        "fnr": 0.1,
+        "accuracy": 0.9375,
+        "precision": 0.907,
+        "recall": 0.975,
+        "f1": 0.9398,
+        "fpr": 0.1,
+        "fnr": 0.025,
         "cm": [
           [
-            38,
-            2
+            36,
+            4
           ],
           [
-            4,
-            36
+            1,
+            39
+          ]
+        ]
+      },
+      "zenodo_test": {
+        "accuracy": 0.9655,
+        "precision": 0.9545,
+        "recall": 1.0,
+        "f1": 0.9767,
+        "fpr": 0.125,
+        "fnr": 0.0,
+        "cm": [
+          [
+            21,
+            3
+          ],
+          [
+            0,
+            63
           ]
         ]
       },
       "weights": {
-        "P": 0.392,
-        "U": 0.0861,
-        "A": 0.1667,
-        "F": 0.1342,
-        "R": 0.221
+        "P": 0.4612,
+        "U": 0.1224,
+        "A": 0.1144,
+        "F": 0.0935,
+        "R": 0.2086
       },
       "tau": 0.18
     },
     "E5 without urgency": {
       "sms_test": {
-        "accuracy": 0.9961,
-        "precision": 0.9895,
-        "recall": 0.9792,
-        "f1": 0.9843,
-        "fpr": 0.0015,
-        "fnr": 0.0208,
+        "accuracy": 0.9837,
+        "precision": 0.8922,
+        "recall": 0.9891,
+        "f1": 0.9381,
+        "fpr": 0.017,
+        "fnr": 0.0109,
         "cm": [
           [
-            677,
-            1
-          ],
-          [
-            2,
-            94
-          ]
-        ]
-      },
-      "chat_test": {
-        "accuracy": 0.9375,
-        "precision": 0.9487,
-        "recall": 0.925,
-        "f1": 0.9367,
-        "fpr": 0.05,
-        "fnr": 0.075,
-        "cm": [
-          [
-            38,
-            2
-          ],
-          [
-            3,
-            37
-          ]
-        ]
-      },
-      "weights": {
-        "P": 0.4191,
-        "U": 0.0,
-        "A": 0.1762,
-        "F": 0.1634,
-        "R": 0.2414
-      },
-      "tau": 0.18
-    },
-    "E5 without authority": {
-      "sms_test": {
-        "accuracy": 0.9961,
-        "precision": 0.9895,
-        "recall": 0.9792,
-        "f1": 0.9843,
-        "fpr": 0.0015,
-        "fnr": 0.0208,
-        "cm": [
-          [
-            677,
-            1
-          ],
-          [
-            2,
-            94
-          ]
-        ]
-      },
-      "chat_test": {
-        "accuracy": 0.95,
-        "precision": 0.9737,
-        "recall": 0.925,
-        "f1": 0.9487,
-        "fpr": 0.025,
-        "fnr": 0.075,
-        "cm": [
-          [
-            39,
-            1
-          ],
-          [
-            3,
-            37
-          ]
-        ]
-      },
-      "weights": {
-        "P": 0.4378,
-        "U": 0.099,
-        "A": 0.0,
-        "F": 0.1896,
-        "R": 0.2736
-      },
-      "tau": 0.2
-    },
-    "E5 without fear": {
-      "sms_test": {
-        "accuracy": 0.9948,
-        "precision": 0.9894,
-        "recall": 0.9688,
-        "f1": 0.9789,
-        "fpr": 0.0015,
-        "fnr": 0.0312,
-        "cm": [
-          [
-            677,
-            1
-          ],
-          [
-            3,
-            93
-          ]
-        ]
-      },
-      "chat_test": {
-        "accuracy": 0.9375,
-        "precision": 0.9487,
-        "recall": 0.925,
-        "f1": 0.9367,
-        "fpr": 0.05,
-        "fnr": 0.075,
-        "cm": [
-          [
-            38,
-            2
-          ],
-          [
-            3,
-            37
-          ]
-        ]
-      },
-      "weights": {
-        "P": 0.4275,
-        "U": 0.1233,
-        "A": 0.2079,
-        "F": 0.0,
-        "R": 0.2413
-      },
-      "tau": 0.2
-    },
-    "E5 without all manipulation (P+R)": {
-      "sms_test": {
-        "accuracy": 0.9922,
-        "precision": 0.95,
-        "recall": 0.9896,
-        "f1": 0.9694,
-        "fpr": 0.0074,
-        "fnr": 0.0104,
-        "cm": [
-          [
-            673,
-            5
+            635,
+            11
           ],
           [
             1,
-            95
+            91
           ]
         ]
       },
       "chat_test": {
-        "accuracy": 0.9375,
-        "precision": 0.9268,
+        "accuracy": 0.925,
+        "precision": 0.9048,
         "recall": 0.95,
-        "f1": 0.9383,
-        "fpr": 0.075,
+        "f1": 0.9268,
+        "fpr": 0.1,
         "fnr": 0.05,
         "cm": [
           [
-            37,
-            3
+            36,
+            4
           ],
           [
             2,
@@ -297,91 +213,63 @@
           ]
         ]
       },
-      "weights": {
-        "P": 0.5941,
-        "U": 0.0,
-        "A": 0.0,
-        "F": 0.0,
-        "R": 0.4059
-      },
-      "tau": 0.21
-    },
-    "E5 without pattern risk (P+U+A+F)": {
-      "sms_test": {
-        "accuracy": 0.9961,
-        "precision": 0.9895,
-        "recall": 0.9792,
-        "f1": 0.9843,
-        "fpr": 0.0015,
-        "fnr": 0.0208,
+      "zenodo_test": {
+        "accuracy": 0.9655,
+        "precision": 0.9545,
+        "recall": 1.0,
+        "f1": 0.9767,
+        "fpr": 0.125,
+        "fnr": 0.0,
         "cm": [
           [
-            677,
-            1
+            21,
+            3
           ],
           [
-            2,
-            94
+            0,
+            63
+          ]
+        ]
+      },
+      "weights": {
+        "P": 0.5125,
+        "U": 0.0,
+        "A": 0.1259,
+        "F": 0.1208,
+        "R": 0.2407
+      },
+      "tau": 0.19
+    },
+    "E5 without authority": {
+      "sms_test": {
+        "accuracy": 0.9837,
+        "precision": 0.8922,
+        "recall": 0.9891,
+        "f1": 0.9381,
+        "fpr": 0.017,
+        "fnr": 0.0109,
+        "cm": [
+          [
+            635,
+            11
+          ],
+          [
+            1,
+            91
           ]
         ]
       },
       "chat_test": {
-        "accuracy": 0.8625,
-        "precision": 0.8919,
-        "recall": 0.825,
-        "f1": 0.8571,
+        "accuracy": 0.95,
+        "precision": 0.9091,
+        "recall": 1.0,
+        "f1": 0.9524,
         "fpr": 0.1,
-        "fnr": 0.175,
+        "fnr": 0.0,
         "cm": [
           [
             36,
             4
-          ],
-          [
-            7,
-            33
-          ]
-        ]
-      },
-      "weights": {
-        "P": 0.4928,
-        "U": 0.1117,
-        "A": 0.2335,
-        "F": 0.1621,
-        "R": 0.0
-      },
-      "tau": 0.18
-    },
-    "E5 rules only (U+A+F+R, no text model)": {
-      "sms_test": {
-        "accuracy": 0.9276,
-        "precision": 0.7,
-        "recall": 0.7292,
-        "f1": 0.7143,
-        "fpr": 0.0442,
-        "fnr": 0.2708,
-        "cm": [
-          [
-            648,
-            30
-          ],
-          [
-            26,
-            70
-          ]
-        ]
-      },
-      "chat_test": {
-        "accuracy": 0.9125,
-        "precision": 0.8511,
-        "recall": 1.0,
-        "f1": 0.9195,
-        "fpr": 0.175,
-        "fnr": 0.0,
-        "cm": [
-          [
-            33,
-            7
           ],
           [
             0,
@@ -389,22 +277,296 @@
           ]
         ]
       },
+      "zenodo_test": {
+        "accuracy": 0.9655,
+        "precision": 0.9545,
+        "recall": 1.0,
+        "f1": 0.9767,
+        "fpr": 0.125,
+        "fnr": 0.0,
+        "cm": [
+          [
+            21,
+            3
+          ],
+          [
+            0,
+            63
+          ]
+        ]
+      },
+      "weights": {
+        "P": 0.5023,
+        "U": 0.1343,
+        "A": 0.0,
+        "F": 0.1221,
+        "R": 0.2414
+      },
+      "tau": 0.19
+    },
+    "E5 without fear": {
+      "sms_test": {
+        "accuracy": 0.9837,
+        "precision": 0.8922,
+        "recall": 0.9891,
+        "f1": 0.9381,
+        "fpr": 0.017,
+        "fnr": 0.0109,
+        "cm": [
+          [
+            635,
+            11
+          ],
+          [
+            1,
+            91
+          ]
+        ]
+      },
+      "chat_test": {
+        "accuracy": 0.925,
+        "precision": 0.9048,
+        "recall": 0.95,
+        "f1": 0.9268,
+        "fpr": 0.1,
+        "fnr": 0.05,
+        "cm": [
+          [
+            36,
+            4
+          ],
+          [
+            2,
+            38
+          ]
+        ]
+      },
+      "zenodo_test": {
+        "accuracy": 0.9655,
+        "precision": 0.9545,
+        "recall": 1.0,
+        "f1": 0.9767,
+        "fpr": 0.125,
+        "fnr": 0.0,
+        "cm": [
+          [
+            21,
+            3
+          ],
+          [
+            0,
+            63
+          ]
+        ]
+      },
+      "weights": {
+        "P": 0.5013,
+        "U": 0.1399,
+        "A": 0.1392,
+        "F": 0.0,
+        "R": 0.2197
+      },
+      "tau": 0.19
+    },
+    "E5 without all manipulation (P+R)": {
+      "sms_test": {
+        "accuracy": 0.9851,
+        "precision": 0.901,
+        "recall": 0.9891,
+        "f1": 0.943,
+        "fpr": 0.0155,
+        "fnr": 0.0109,
+        "cm": [
+          [
+            636,
+            10
+          ],
+          [
+            1,
+            91
+          ]
+        ]
+      },
+      "chat_test": {
+        "accuracy": 0.9125,
+        "precision": 0.9024,
+        "recall": 0.925,
+        "f1": 0.9136,
+        "fpr": 0.1,
+        "fnr": 0.075,
+        "cm": [
+          [
+            36,
+            4
+          ],
+          [
+            3,
+            37
+          ]
+        ]
+      },
+      "zenodo_test": {
+        "accuracy": 0.9655,
+        "precision": 0.9545,
+        "recall": 1.0,
+        "f1": 0.9767,
+        "fpr": 0.125,
+        "fnr": 0.0,
+        "cm": [
+          [
+            21,
+            3
+          ],
+          [
+            0,
+            63
+          ]
+        ]
+      },
+      "weights": {
+        "P": 0.6731,
+        "U": 0.0,
+        "A": 0.0,
+        "F": 0.0,
+        "R": 0.3269
+      },
+      "tau": 0.25
+    },
+    "E5 without pattern risk (P+U+A+F)": {
+      "sms_test": {
+        "accuracy": 0.9864,
+        "precision": 0.91,
+        "recall": 0.9891,
+        "f1": 0.9479,
+        "fpr": 0.0139,
+        "fnr": 0.0109,
+        "cm": [
+          [
+            637,
+            9
+          ],
+          [
+            1,
+            91
+          ]
+        ]
+      },
+      "chat_test": {
+        "accuracy": 0.9,
+        "precision": 0.9211,
+        "recall": 0.875,
+        "f1": 0.8974,
+        "fpr": 0.075,
+        "fnr": 0.125,
+        "cm": [
+          [
+            37,
+            3
+          ],
+          [
+            5,
+            35
+          ]
+        ]
+      },
+      "zenodo_test": {
+        "accuracy": 0.977,
+        "precision": 0.9692,
+        "recall": 1.0,
+        "f1": 0.9844,
+        "fpr": 0.0833,
+        "fnr": 0.0,
+        "cm": [
+          [
+            22,
+            2
+          ],
+          [
+            0,
+            63
+          ]
+        ]
+      },
+      "weights": {
+        "P": 0.5808,
+        "U": 0.1544,
+        "A": 0.163,
+        "F": 0.1018,
+        "R": 0.0
+      },
+      "tau": 0.22
+    },
+    "E5 rules only (U+A+F+R, no text model)": {
+      "sms_test": {
+        "accuracy": 0.9322,
+        "precision": 0.6875,
+        "recall": 0.837,
+        "f1": 0.7549,
+        "fpr": 0.0542,
+        "fnr": 0.163,
+        "cm": [
+          [
+            611,
+            35
+          ],
+          [
+            15,
+            77
+          ]
+        ]
+      },
+      "chat_test": {
+        "accuracy": 0.925,
+        "precision": 0.8696,
+        "recall": 1.0,
+        "f1": 0.9302,
+        "fpr": 0.15,
+        "fnr": 0.0,
+        "cm": [
+          [
+            34,
+            6
+          ],
+          [
+            0,
+            40
+          ]
+        ]
+      },
+      "zenodo_test": {
+        "accuracy": 0.8851,
+        "precision": 0.9344,
+        "recall": 0.9048,
+        "f1": 0.9194,
+        "fpr": 0.1667,
+        "fnr": 0.0952,
+        "cm": [
+          [
+            20,
+            4
+          ],
+          [
+            6,
+            57
+          ]
+        ]
+      },
       "weights": {
         "P": 0.0,
-        "U": 0.1477,
-        "A": 0.127,
-        "F": 0.1898,
-        "R": 0.5355
+        "U": 0.1444,
+        "A": 0.049,
+        "F": 0.2299,
+        "R": 0.5767
       },
-      "tau": 0.1
+      "tau": 0.12
     }
   },
   "weights": {
-    "P": 0.392,
-    "U": 0.0861,
-    "A": 0.1667,
-    "F": 0.1342,
-    "R": 0.221
+    "P": 0.4612,
+    "U": 0.1224,
+    "A": 0.1144,
+    "F": 0.0935,
+    "R": 0.2086
   },
   "tau": 0.18,
   "tactics_chat_test": {
@@ -430,8 +592,8 @@
   "by_attack_type_chat_test": {
     "baiting": {
       "n": 5,
-      "proposed_flag_rate": 0.8,
-      "text_only_flag_rate": 0.6
+      "proposed_flag_rate": 1.0,
+      "text_only_flag_rate": 0.8
     },
     "benign": {
       "n": 21,
@@ -440,8 +602,8 @@
     },
     "benign_hard": {
       "n": 19,
-      "proposed_flag_rate": 0.105,
-      "text_only_flag_rate": 0.0
+      "proposed_flag_rate": 0.211,
+      "text_only_flag_rate": 0.158
     },
     "giveaway_scam": {
       "n": 5,
@@ -451,101 +613,155 @@
     "impersonation": {
       "n": 5,
       "proposed_flag_rate": 1.0,
-      "text_only_flag_rate": 0.2
+      "text_only_flag_rate": 0.6
     },
     "payment_scam": {
       "n": 6,
-      "proposed_flag_rate": 0.833,
-      "text_only_flag_rate": 0.167
+      "proposed_flag_rate": 1.0,
+      "text_only_flag_rate": 0.333
     },
     "phishing": {
       "n": 11,
       "proposed_flag_rate": 1.0,
-      "text_only_flag_rate": 0.727
+      "text_only_flag_rate": 1.0
     },
     "pretexting": {
       "n": 5,
-      "proposed_flag_rate": 0.6,
-      "text_only_flag_rate": 0.0
+      "proposed_flag_rate": 0.8,
+      "text_only_flag_rate": 0.4
     },
     "scareware": {
       "n": 3,
       "proposed_flag_rate": 1.0,
-      "text_only_flag_rate": 0.667
+      "text_only_flag_rate": 1.0
     }
   },
   "severity_levels_chat_test": {
     "0": {
+      "CRITICAL": 0,
       "HIGH": 0,
-      "LOW": 38,
-      "MEDIUM": 2
+      "LOW": 36,
+      "MEDIUM": 4
     },
     "1": {
-      "HIGH": 5,
-      "LOW": 4,
-      "MEDIUM": 31
+      "CRITICAL": 2,
+      "HIGH": 16,
+      "LOW": 1,
+      "MEDIUM": 21
+    }
+  },
+  "zenodo_by_attack_type": {
+    "Malware": {
+      "n": 4,
+      "proposed_flag_rate": 1.0,
+      "text_only_flag_rate": 1.0
+    },
+    "Phishing": {
+      "n": 20,
+      "proposed_flag_rate": 1.0,
+      "text_only_flag_rate": 1.0
+    },
+    "Pretexting": {
+      "n": 30,
+      "proposed_flag_rate": 1.0,
+      "text_only_flag_rate": 1.0
+    },
+    "Scareware": {
+      "n": 9,
+      "proposed_flag_rate": 1.0,
+      "text_only_flag_rate": 1.0
+    },
+    "legitimate": {
+      "n": 24,
+      "proposed_flag_rate": 0.125,
+      "text_only_flag_rate": 0.0
+    }
+  },
+  "external_tactic_set": {
+    "n": 79,
+    "detection_recall_proposed": 1.0,
+    "detection_recall_text_only": 0.949,
+    "by_category": {
+      "authority": {
+        "n": 25,
+        "proposed": 1.0,
+        "text_only": 0.96,
+        "tactic_urgency_rate": 0.4,
+        "tactic_authority_rate": 0.04,
+        "tactic_fear_rate": 0.4
+      },
+      "persuasion": {
+        "n": 29,
+        "proposed": 1.0,
+        "text_only": 1.0,
+        "tactic_urgency_rate": 0.448,
+        "tactic_authority_rate": 0.0,
+        "tactic_fear_rate": 0.0
+      },
+      "urgency": {
+        "n": 25,
+        "proposed": 1.0,
+        "text_only": 0.88,
+        "tactic_urgency_rate": 0.8,
+        "tactic_authority_rate": 0.0,
+        "tactic_fear_rate": 0.8
+      }
     }
   },
   "latency_ms": {
-    "n": 934,
-    "mean": 2.724,
-    "p50": 2.742,
-    "p95": 3.723,
-    "p99": 4.56,
-    "max": 5.702,
-    "throughput_msgs_per_s": 465.9
+    "n": 898,
+    "mean": 2.33,
+    "p50": 2.152,
+    "p95": 3.734,
+    "p99": 4.645,
+    "max": 6.485,
+    "throughput_msgs_per_s": 392.5
   },
   "bootstrap_chat_f1": {
     "text_only_ci": [
-      0.517,
-      0.794
+      0.71,
+      0.909
     ],
     "proposed_ci": [
-      0.852,
-      0.976
+      0.88,
+      0.987
     ],
     "improvement_ci": [
-      0.13,
-      0.402
+      0.035,
+      0.214
     ],
-    "p_improvement_le_0": 0.0
+    "p_improvement_le_0": 0.001
   },
   "errors_chat_test": [
     {
-      "id": "S027",
-      "type": "FN",
-      "score": 0.177,
-      "text": "bro your account is gonna get hacked, there's a bug, give me your 2FA backup codes and I'll secure it"
-    },
-    {
-      "id": "S028",
-      "type": "FN",
-      "score": 0.129,
-      "text": "Download this new game beta and test it for me, it's an exe, I'll pay you $20 in Nitro"
-    },
-    {
-      "id": "S075",
-      "type": "FN",
-      "score": 0.172,
-      "text": "Hi friend, I'm stuck abroad and lost my wallet, please send me money via Western Union asap"
-    },
-    {
       "id": "S079",
       "type": "FN",
-      "score": 0.153,
+      "score": 0.171,
       "text": "quick question, can you tell me the verification code you just got? I typed my number wrong"
+    },
+    {
+      "id": "B006",
+      "type": "FP",
+      "score": 0.279,
+      "text": "remember to verify your email in Discord settings if you want to chat in the server"
     },
     {
       "id": "B008",
       "type": "FP",
-      "score": 0.224,
+      "score": 0.307,
       "text": "the giveaway winner will be announced by the streamer on screen, never DM anyone your details"
     },
     {
       "id": "B012",
       "type": "FP",
-      "score": 0.188,
+      "score": 0.276,
       "text": "the official merch store link is in the description"
+    },
+    {
+      "id": "B019",
+      "type": "FP",
+      "score": 0.2,
+      "text": "PSA: there are scammers sending fake nitro links, don't click them"
     }
   ],
   "authority_misses_chat_test": [

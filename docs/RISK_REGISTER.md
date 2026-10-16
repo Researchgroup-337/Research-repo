@@ -2,9 +2,12 @@
 
 | # | Risk | Likelihood | Impact | Mitigation | Status |
 |---|---|---|---|---|---|
-| R1 | Text model trained on SMS doesn't transfer to chat (domain shift) | High (observed: recall 0.50) | High | hybrid manipulation + pattern features (recall 0.90); add Zenodo + chat data; DistilBERT | mitigated, monitoring |
-| R2 | Implied authority (brand + official format) missed by lexicon | High (authority recall 0.40) | Medium | DistilBERT tactic classifier; brand-impersonation features | open, PP2 |
-| R3 | Small, single-annotator scenario set → biased estimates | High | Medium | dev/test split, bootstrap CIs, second annotator + κ | partially mitigated |
+| R1 | Text model doesn't transfer to chat (domain shift) | High (observed: text-only recall 0.50 SMS-only, 0.75 with Zenodo) | High | hybrid manipulation + pattern features (recall 0.975); more chat-like data; DistilBERT | mitigated, monitoring |
+| R2 | Implied authority (brand + official format) missed by lexicon | High (chat recall 0.40; third-party set 4%) | Medium | institutional-authority cues tuned on a dev half of the third-party set; DistilBERT tactic classifier | open, next task |
+| R3 | Small, single-annotator scenario set → biased estimates | High | Medium | dev/test split, bootstrap CIs, independent third-party tactic set added; second annotator + κ | partially mitigated |
+| R9 | Train/test leakage from near-duplicate template variants (found: 43% of Zenodo test had a ≥0.8 near-copy in train) | High | High (inflated scores) | near-duplicate grouping + group-aware split; leakage now 0% | mitigated |
+| R10 | Protective advice ("never share your password", "don't click fake links") scored as a scam | Medium (4 of 40 benign chat msgs flagged) | Medium (alert fatigue) | protective-advice / negation detector; documented as xfail test | open, next task |
+| R11 | Low-quality public datasets (synthetic, 3 templates × 20,000 rows) | Medium | High | dataset audit before use; rejected `phishing_spam_large_dataset.csv` | mitigated |
 | R4 | False positives annoy moderators (alert fatigue) | Medium | High | alerts only HIGH/CRITICAL; evidence shown; FPR tracked (0.05 chat) | mitigated |
 | R5 | No GPU for DistilBERT fine-tuning | Medium | Medium | Colab T4; TF-IDF model is the fallback with the same interface | mitigated |
 | R6 | Severity bands not validated against expert ratings | High | Medium | Experiment 6: moderator/supervisor rating of 50 messages | open |

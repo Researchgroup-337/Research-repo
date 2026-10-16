@@ -1,6 +1,6 @@
 # Integration contract: Social Engineering Detection component
 
-**Owner:** D.M.T. Dissanayaka (IT23223462) · **Project:** J26-CS-337 · **Version:** 0.3.0
+**Owner:** D.M.T. Dissanayaka (IT23223462) · **Project:** J26-CS-337 · **Version:** 0.4.0
 
 ## Position in the group pipeline
 
@@ -31,10 +31,10 @@ Real output for: *"Hi, I'm from Twitch Trust & Safety. Your channel was reported
 ```json
 {
   "component": "social_engineering",
-  "model_version": "0.3.0",
+  "model_version": "0.4.0",
   "message_id": "m6", "user_id": "u_3fa2", "channel_id": "demo",
   "is_social_engineering": true,
-  "phishing_probability": 0.9234,
+  "phishing_probability": 0.966,
   "manipulation": {
     "tactics": ["urgency", "authority", "fear"],
     "scores": {"urgency": 0.5934, "authority": 0.9649, "fear": 0.9502},
@@ -42,8 +42,8 @@ Real output for: *"Hi, I'm from Twitch Trust & Safety. Your channel was reported
   },
   "patterns": {"detected": ["account_verification", "suspicious_link"], "evidence": {}, "risk": 0.6199},
   "urls": ["twitch-verify-support.com"],
-  "severity": {"score": 0.8384, "level": "CRITICAL", "threshold": 0.18,
-               "contributions": {"P": 0.362, "U": 0.0511, "A": 0.1608, "F": 0.1275, "R": 0.137}},
+  "severity": {"score": 0.8467, "level": "CRITICAL", "threshold": 0.18,
+               "contributions": {"P": 0.4455, "U": 0.0726, "A": 0.1104, "F": 0.0888, "R": 0.1293}},
   "alert": {"level": "CRITICAL", "summary": "Critical social-engineering risk: urgency, authority, fear, account verification, suspicious link", "recommended_action": "remove message and timeout sender"},
   "latency_ms": 2.7
 }
