@@ -1,0 +1,161 @@
+id,text,is_se,urgency,authority,fear,attack_type,split
+S001,FREE DISCORD NITRO for everyone in chat!! claim here before it runs out: dlscord-gifts.xyz/claim,1,1,1,0,giveaway_scam,test
+S002,"Hi, I'm from Twitch Trust & Safety. Your channel was reported for a violation. Verify your account in the next 30 minutes or it will be permanently banned: twitch-verify-support.com",1,1,1,1,impersonation,dev
+S003,"yo bro I accidentally reported your account, pls message the admin Jake#4432 quick or you'll lose your account",1,1,1,1,pretexting,dev
+S004,Congrats! You were selected as today's giveaway winner 🎉 DM me your email and password so I can send the skin,1,0,0,0,giveaway_scam,dev
+S005,Steam support here. Suspicious login detected on your account. Confirm your identity now at steamcommunlty.ru/login,1,1,1,1,phishing,dev
+S006,"[MOD] chat is being migrated, everyone must re-verify at verify-chatbot.top within 10 min or you get muted",1,1,1,1,impersonation,dev
+S007,"Double your Bitcoin! Send 0.05 BTC to this wallet and get 0.1 back instantly, only 5 spots left",1,1,0,0,payment_scam,dev
+S008,"this is the streamer's manager, we need your PayPal login to send your prize money",1,0,1,0,pretexting,dev
+S009,WARNING: your device is infected with 3 viruses. Download the cleaner from fix-pc-now.site immediately,1,1,0,1,scareware,test
+S010,"Elon is giving away 5000 ETH live right now, scan the QR on screen and send ETH to participate",1,1,1,0,payment_scam,test
+S011,hey can you do me a favor? I'm the event organiser and need the 6 digit code that was just sent to your phone,1,0,1,0,pretexting,dev
+S012,Your YouTube channel will be deleted in 24 hours due to copyright strikes. Appeal here: yt-appeal-center.com,1,1,1,1,phishing,test
+S013,free robux generator no human verification bit.ly/rbx-free-gen,1,0,0,0,baiting,dev
+S014,Last chance!!! claim your free gift card before midnight -> giftz4u.click,1,1,0,0,giveaway_scam,dev
+S015,I'm a Discord staff member. We detected illegal activity on your account. Send me your token so we can review it or it will be disabled,1,0,1,1,impersonation,dev
+S016,Police notice: your IP was linked to a cybercrime. Pay the fine of $200 in gift cards within 2 hours to avoid arrest,1,1,1,1,scareware,test
+S017,check out this leaked clip of you lol grabify-style.link/x9 download it before they delete it,1,1,0,0,baiting,test
+S018,"hi dear, I'm a recruiter from Riot Games, we offer you paid tester job. Just pay the $50 registration fee first",1,0,1,0,payment_scam,dev
+S019,URGENT: Your bank account has been locked. Verify your card details at secure-bank-verify.info now,1,1,1,1,phishing,test
+S020,Want free followers? Login with your Twitch account at followboost.top and get 1000 followers instantly,1,0,0,0,baiting,dev
+S021,"I'm one of the mods, the streamer asked me to collect everyone's emails for the raffle, DM me yours + password",1,0,1,0,impersonation,test
+S022,your account has unauthorized login from Russia!! reset password here asap: acc-security-check.com,1,1,0,1,phishing,dev
+S023,Microsoft support: we detected a problem with your Windows license. Call +1-800-555-0199 immediately to avoid data loss,1,1,1,1,scareware,dev
+S024,"Hey, I sent you $50 by mistake on CashApp, can you send it back to me please, I really need it today",1,1,0,0,payment_scam,dev
+S025,giveaway ends in 5 minutes!!! only the first 10 people who send 1 dollar to my paypal get the iPhone,1,1,0,0,payment_scam,test
+S026,Official Twitch Partner Program: you qualify! Submit your bank details and ID at twitch-partners-apply.net,1,0,1,0,phishing,test
+S027,"bro your account is gonna get hacked, there's a bug, give me your 2FA backup codes and I'll secure it",1,0,0,1,pretexting,test
+S028,"Download this new game beta and test it for me, it's an exe, I'll pay you $20 in Nitro",1,0,0,0,baiting,test
+S029,Admin here. Due to a security breach all users must confirm their login credentials by today,1,1,1,1,impersonation,dev
+S030,"you've been chosen for a free CS2 knife skin, link your steam account here: csgo-skin-drop.gg",1,0,0,0,giveaway_scam,test
+S031,This is your final notice. Your subscription will be charged $499 unless you cancel now at cancel-sub-help.com,1,1,0,1,phishing,dev
+S032,"pls help me, my account got stolen, can you login to this site with yours so I can verify it's you: verify-friend.site",1,0,0,0,pretexting,test
+S033,FBI cyber division: your account is under investigation. Do not tell anyone and reply with your full name and address,1,0,1,1,scareware,test
+S034,"get free vbucks now, limited offer, only today, enter your epic login at vbuck-free.online",1,1,0,0,baiting,test
+S035,"Hi I'm from the PayPal security team, your payment was blocked, confirm your password so we can release it",1,0,1,1,phishing,test
+S036,"psst, keep this secret from the mods, I can sell you a hacked account cheap, send crypto first",1,0,0,0,payment_scam,test
+S037,Your Discord will be terminated within 48 hours because you violated our ToS. Appeal: discord-appeals.help,1,1,1,1,phishing,dev
+S038,Winner announcement: you won the stream raffle! Pay the $10 shipping fee to receive your prize,1,0,0,0,giveaway_scam,test
+S039,Warning! Your PC is sending spam. Install our security tool now or your files will be encrypted,1,1,0,1,scareware,dev
+S040,"I'm the streamer's brother, he asked me to collect donations directly, send to my PayPal not the official link",1,0,1,0,impersonation,dev
+S041,"Claim your $100 Amazon gift card, survey closes in 15 minutes: amzn-rewards.club",1,1,1,0,giveaway_scam,dev
+S042,Your Instagram is about to be disabled for suspicious activity. Click to verify: insta-help-center.org,1,1,1,1,phishing,test
+S043,"yo add me on telegram @cryptoking, I'll show you how to make 10k a week, just need a small deposit",1,0,0,0,payment_scam,dev
+S044,Bank of Ceylon alert: unusual transaction detected. Reply with your OTP to cancel the transaction immediately,1,1,1,1,phishing,dev
+S045,"I'm a developer of this bot, type your email and password here so the bot can link your rewards",1,0,1,0,impersonation,test
+S046,"this mod is abusing power, everyone report them here and login to confirm: report-abuse-portal.xyz",1,0,0,0,phishing,test
+S047,you have been hacked. I have your webcam videos. Pay 0.1 BTC within 24 hours or I send them to all your friends,1,1,0,1,scareware,dev
+S048,"hey are you the one who won the giveaway yesterday? the bot needs your login to confirm, hurry",1,1,0,0,giveaway_scam,dev
+S049,Youtube Partner team: monetization will be removed from your channel today unless you verify your AdSense login,1,1,1,1,phishing,dev
+S050,New verification bot! Scan this QR with your Discord mobile app to get the verified role,1,0,0,0,phishing,test
+S051,Do not ignore this message. Your Steam inventory will be locked forever unless you confirm trade here now,1,1,0,1,phishing,dev
+S052,"Hello, I'm with Epic Games support. We are refunding your purchase, please share your card number to process it",1,0,1,0,pretexting,test
+S053,"Exclusive: free premium cheats for everyone in chat, disable your antivirus and run the installer",1,0,0,0,baiting,dev
+S054,Your Netflix payment failed. Update your billing info within 24h or your account will be suspended: netflix-billing-update.com,1,1,1,1,phishing,test
+S055,"I am a government grant officer, you are eligible for $5000. Send a processing fee of $100 to receive it",1,0,1,0,payment_scam,test
+S056,OMG is this you in this video?? www.vid-viewer.ru/w?id=88,1,0,0,0,baiting,test
+S057,"Act fast! Only 3 free Nitro codes left, first to login at nitro-claim.app wins",1,1,0,0,giveaway_scam,dev
+S058,[Twitch Staff] Your stream key has been leaked. Send us your current stream key and password to rotate it now,1,1,1,1,impersonation,test
+S059,don't tell anyone but the moderator team is giving secret VIP to people who verify their card at vip-pass.site,1,0,1,0,impersonation,test
+S060,Your account has been flagged for underage use and will be banned unless you upload your ID immediately,1,1,0,1,phishing,dev
+S061,"Hey it's me from the clan, my card is blocked, can you buy me a $100 Steam gift card and send me the code? I'll pay you back tomorrow",1,0,0,0,payment_scam,dev
+S062,"Security alert from Discord: someone tried to access your account. If this wasn't you, log in here to secure it: discordapp-secure.com",1,0,1,1,phishing,test
+S063,"final warning, if you don't verify your age now your channel will be removed permanently",1,1,0,1,phishing,dev
+S064,Selected viewers can get a free gaming PC! Just pay delivery and enter your bank login for verification,1,0,0,0,giveaway_scam,dev
+S065,Hello this is Apple Support. Your iCloud was compromised. Call us right now and give us the code we send you,1,1,1,1,pretexting,dev
+S066,"Join our investment group, guaranteed 300% returns, spots close tonight",1,1,0,0,payment_scam,test
+S067,"I'm with the tournament organizers, you qualified! Confirm with your Riot username and password within the hour",1,1,1,0,pretexting,test
+S068,Your email will be blacklisted for spam unless you confirm ownership at mail-verify-center.net,1,0,0,1,phishing,dev
+S069,anyone want free spotify premium? just login with your spotify account here spotfy-premium.free,1,0,0,0,baiting,test
+S070,"This is the stream admin. Your chat privileges are suspended. To restore them, pay $5 via this link immediately",1,1,1,1,impersonation,dev
+S071,you dropped this 🎁 -> click to open gift: steamgift-claim.com,1,0,0,0,giveaway_scam,test
+S072,Your package could not be delivered. Pay the customs fee now or it will be returned: dhl-redelivery.info,1,1,1,1,phishing,test
+S073,"I'm from IT department, we're upgrading the server, please send me your username and password",1,0,1,0,pretexting,dev
+S074,"Breaking: your wallet was flagged for money laundering, verify your seed phrase immediately to unfreeze funds",1,1,0,1,phishing,dev
+S075,"Hi friend, I'm stuck abroad and lost my wallet, please send me money via Western Union asap",1,1,0,0,payment_scam,test
+S076,"Hey streamer, we want to sponsor you! Download our game launcher sponsor-pack.exe and record a review",1,0,0,0,baiting,dev
+S077,Your OnlyFans/Patreon payout is on hold. Re-enter your banking password at payout-release.net now,1,1,0,0,phishing,test
+S078,Riot Games: you have been selected for a ban appeal. Provide your login details to avoid permanent suspension,1,0,1,1,impersonation,test
+S079,"quick question, can you tell me the verification code you just got? I typed my number wrong",1,0,0,0,pretexting,test
+S080,"Claim free 10000 V-Bucks, offer expires in 10 minutes!! vbucks.gift-claim.tk",1,1,0,0,giveaway_scam,test
+B001,lol that play was insane,0,0,0,0,benign,test
+B002,"stream starting in 5 minutes, grab your snacks!",0,1,0,0,benign_hard,test
+B003,"mods please ban this spammer, he keeps posting links",0,0,0,0,benign_hard,test
+B004,I'm so scared of this boss fight omg,0,0,0,0,benign_hard,dev
+B005,"gg everyone, see you tomorrow",0,0,0,0,benign,dev
+B006,remember to verify your email in Discord settings if you want to chat in the server,0,0,0,0,benign_hard,test
+B007,who else is watching from Sri Lanka?,0,0,0,0,benign,test
+B008,"the giveaway winner will be announced by the streamer on screen, never DM anyone your details",0,0,0,0,benign_hard,test
+B009,"hurry up and heal, he's going to die!",0,1,0,0,benign_hard,dev
+B010,"my account got banned last week for no reason, support fixed it though",0,0,0,0,benign_hard,dev
+B011,can someone link the playlist of this song?,0,0,0,0,benign,dev
+B012,the official merch store link is in the description,0,0,0,0,benign_hard,test
+B013,I won my first ranked match today!!,0,0,0,0,benign,test
+B014,chat is moving so fast right now,0,0,0,0,benign,test
+B015,"don't forget, never share your password with anyone, even mods",0,0,0,0,benign_hard,dev
+B016,what settings do you use for the graphics?,0,0,0,0,benign,test
+B017,"I need to log off now, exam tomorrow",0,0,0,0,benign,test
+B018,that jumpscare made me fall off my chair,0,0,0,0,benign_hard,dev
+B019,"PSA: there are scammers sending fake nitro links, don't click them",0,0,0,0,benign_hard,test
+B020,how do I enable 2FA on my twitch account?,0,0,0,0,benign_hard,dev
+B021,the police in this game are so dumb haha,0,0,0,0,benign_hard,dev
+B022,thanks for the sub gift!,0,0,0,0,benign,test
+B023,"i'm the mod for tonight's stream, keep it chill everyone",0,0,0,0,benign_hard,dev
+B024,"you have 30 seconds left on the timer, go go go",0,1,0,0,benign_hard,dev
+B025,the bank level in this game is so hard,0,0,0,0,benign,test
+B026,anyone know when the next update drops?,0,0,0,0,benign,dev
+B027,free to play weekend starts today on Steam,0,0,0,0,benign_hard,dev
+B028,I lost all my progress because the game crashed,0,0,0,0,benign,test
+B029,please don't spoil the ending,0,0,0,0,benign,test
+B030,his account will get banned if he keeps cheating lol,0,0,0,0,benign_hard,dev
+B031,we hit 1000 followers!! thank you all,0,0,0,0,benign,dev
+B032,can you play the next map please,0,0,0,0,benign,dev
+B033,what time is it there?,0,0,0,0,benign,dev
+B034,the stream will end at midnight today,0,0,0,0,benign_hard,dev
+B035,"I donated through the official tip button, hope it helps",0,0,0,0,benign_hard,dev
+B036,Twitch is down again in my region?,0,0,0,0,benign,test
+B037,"bro you have to try the new update now, it's amazing",0,1,0,0,benign_hard,test
+B038,"my password manager saved me today, highly recommend one",0,0,0,0,benign_hard,dev
+B039,that's the best clip of the year,0,0,0,0,benign,dev
+B040,hello from the UK!,0,0,0,0,benign,dev
+B041,this game's support team is terrible honestly,0,0,0,0,benign_hard,test
+B042,click the bell icon to get notified when he goes live,0,0,0,0,benign_hard,test
+B043,"wait, did he just win the tournament??",0,0,0,0,benign,test
+B044,"don't panic, it's just a cutscene",0,0,0,0,benign,dev
+B045,the streamer said the giveaway is only through the official bot,0,0,0,0,benign_hard,test
+B046,"I'm a developer too, which engine is this?",0,0,0,0,benign_hard,dev
+B047,low key scared for the next round,0,0,0,0,benign_hard,test
+B048,let's goooo,0,0,0,0,benign,test
+B049,the admin of my server added a new music bot,0,0,0,0,benign_hard,test
+B050,"quick, look behind you!!",0,1,0,0,benign_hard,test
+B051,"I just bought the battle pass, worth it",0,0,0,0,benign,dev
+B052,how much did that keyboard cost?,0,0,0,0,benign,test
+B053,"reminder: the raffle winner is drawn live on stream, not in DMs",0,0,0,0,benign_hard,test
+B054,"I'm going to get some food, brb",0,0,0,0,benign,test
+B055,the security guard enemy is overpowered,0,0,0,0,benign,dev
+B056,this song is a banger,0,0,0,0,benign,test
+B057,you should verify the save file before uploading the mod,0,0,0,0,benign_hard,dev
+B058,my internet is so slow today,0,0,0,0,benign,dev
+B059,last stream was better tbh,0,0,0,0,benign,test
+B060,do you accept PayPal for the coaching sessions?,0,0,0,0,benign_hard,test
+B061,"wow that was close, almost lost the whole team",0,0,0,0,benign,dev
+B062,Happy birthday to the streamer!!,0,0,0,0,benign,dev
+B063,there's a free demo on the official website,0,0,0,0,benign_hard,dev
+B064,i'm so tired but i can't stop watching,0,0,0,0,benign,test
+B065,"use code STREAM10 at checkout for 10% off the merch, link in bio",0,0,0,0,benign_hard,test
+B066,the final boss is terrifying,0,0,0,0,benign_hard,dev
+B067,can mods pin the schedule please,0,0,0,0,benign,dev
+B068,your aim is crazy today,0,0,0,0,benign,dev
+B069,"report bugs on the official forum, the devs read them",0,0,0,0,benign_hard,test
+B070,"i got a phishing email yesterday pretending to be my bank, be careful everyone",0,0,0,0,benign_hard,test
+B071,hydrate check! drink some water,0,0,0,0,benign,dev
+B072,"next game is going to be horror, get ready",0,0,0,0,benign,test
+B073,he got banned from the tournament for toxicity,0,0,0,0,benign_hard,dev
+B074,"the deadline for the art contest is Friday, submit on the subreddit",0,1,0,0,benign_hard,test
+B075,is this game available on PS5?,0,0,0,0,benign,dev
+B076,thanks mods for keeping chat clean,0,0,0,0,benign,dev
+B077,I'm crying this is so funny,0,0,0,0,benign,test
+B078,can you explain the build again?,0,0,0,0,benign,test
+B079,what's your favourite weapon?,0,0,0,0,benign,dev
+B080,"see you all next week, stay safe",0,0,0,0,benign,dev
