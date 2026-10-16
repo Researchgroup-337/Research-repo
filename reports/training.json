@@ -1,0 +1,22 @@
+{
+  "version": "0.3.0",
+  "weights": {
+    "P": 0.392,
+    "U": 0.0861,
+    "A": 0.1667,
+    "F": 0.1342,
+    "R": 0.221
+  },
+  "tau": 0.18,
+  "data": {
+    "raw_rows": 5574,
+    "missing_removed": 0,
+    "duplicates_removed": 415,
+    "final_rows": 5159,
+    "positive_rate": 0.1244,
+    "train": 3611,
+    "val": 774,
+    "test": 774
+  },
+  "weight_fit_samples": 854
+}
