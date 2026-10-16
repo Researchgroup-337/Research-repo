@@ -122,7 +122,7 @@ def test_deterministic(det):          # NFR03 reliability
     assert a == b
 
 
-@pytest.mark.parametrize("bad", ["", "   ", None, "x" * 50000, "<script>alert(1)</script>"])
+@pytest.mark.parametrize("bad", ["", "   ", None, "x" * 50000, "<script>alert(1)</script>"], ids=["empty", "spaces", "none", "huge_50k", "html_script"])
 def test_failure_paths(det, bad):     # failure path: empty / huge / hostile input
     r = det.analyze(bad)
     assert 0 <= r["severity"]["score"] <= 1
