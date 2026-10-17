@@ -41,13 +41,13 @@ PATTERNS: dict[str, list[tuple[str, float]]] = {
         (r"\b(?:click|tap|open|visit|go to|log ?in(?: with| here| at)?|sign in|scan (?:the|this) qr|download|install|run the|disable your antivirus|call (?:us|\+?\d))\b", 0.6),
         (r"\b(?:reply|respond|dm me|message me|text \w+ to|call \d)", 0.4),
     ],
-           # --- live-stream chat scams (added by D.M.T. Dissanayaka) ---
-       "livestream_scam": [
-           (r"\b(?:giving away|giveaway|airdrop)\b[^.!?]{0,60}\b(?:btc|bitcoin|eth|ethereum|usdt|usdc|crypto|sol|doge|bnb)\b", 1.0),
-           (r"\bsend\b[^.!?]{0,40}\b(?:get|receive)\b[^.!?]{0,25}\bback\b", 1.0),
-           (r"\b(?:talk|speak|message|dm|contact|add)\b[^.!?]{0,25}\b(?:support|staff|admin|mod)\w*\b[^.!?]{0,25}\bon (?:discord|telegram|whatsapp)\b", 0.9),
-       ],
-       "off_platform_or_secrecy": [
+    # --- live-stream chat scams (added by D.M.T. Dissanayaka) ---
+    "livestream_scam": [
+        (r"\b(?:giving away|giveaway|airdrop)\b[^.!?]{0,60}\b(?:btc|bitcoin|eth|ethereum|usdt|usdc|crypto|sol|doge|bnb)\b", 1.0),
+        (r"\bsend\b[^.!?]{0,40}\b(?:get|receive)\b[^.!?]{0,25}\bback\b", 1.0),
+        (r"\b(?:talk|speak|message|dm|contact|add)\b[^.!?]{0,25}\b(?:support|staff|admin|mod)\w*\b[^.!?]{0,25}\bon (?:discord|telegram|whatsapp)\b", 0.9),
+    ],
+    "off_platform_or_secrecy": [
         (r"\b(?:add me on|dm me|move to dms?|message me on|telegram|whatsapp|signal|snap(?:chat)?)\b", 0.5),
         (r"\b(?:don'?t tell (?:anyone|the mods|your)|keep (?:this|it) (?:secret|between us|private)|do not tell anyone|secret from)\b", 0.9),
     ],
@@ -103,10 +103,10 @@ def url_signals(urls: list[str]) -> dict:
 
 
 def detect(text: str, urls: list[str] | None = None) -> dict:
-           # "0.05 BTC": a dot between digits is not a sentence end (added by D.M.T. Dissanayaka)
-       text = re.sub(r"(?<=\d)\.(?=\d)", ",", text)
     """Detect SE patterns. ``R`` (risk) combines pattern and URL evidence in [0,1]."""
     urls = urls or []
+    # "0.05 BTC": a dot between digits is not a sentence end (added by D.M.T. Dissanayaka)
+    text = re.sub(r"(?<=\d)\.(?=\d)", ",", text)
     found: dict[str, list[str]] = {}
     total = 0.0
     for name, rules in _COMPILED.items():

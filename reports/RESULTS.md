@@ -1,6 +1,6 @@
 # Evaluation results
 
-Model version 0.4.0. Weights {'P': 0.4596, 'U': 0.1227, 'A': 0.1153, 'F': 0.0904, 'R': 0.2119}, threshold tau=0.17.
+Model version 0.4.0. Weights {'P': 0.4598, 'U': 0.1197, 'A': 0.116, 'F': 0.091, 'R': 0.2135}, threshold tau=0.17.
 Test-set sizes: {'sms_test': 738, 'chat_test': 80, 'zenodo_test': 87}
 
 ## Detection (held-out test sets)
@@ -15,7 +15,7 @@ Test-set sizes: {'sms_test': 738, 'chat_test': 80, 'zenodo_test': 87}
 | E5 without fear | 0.938 | 0.017 | 0.977 | 0.125 | 0.950 | 0.950 | 0.050 |
 | E5 without all manipulation (P+R) | 0.943 | 0.015 | 0.977 | 0.125 | 0.937 | 0.925 | 0.050 |
 | E5 without pattern risk (P+U+A+F) | 0.953 | 0.012 | 0.984 | 0.083 | 0.909 | 0.875 | 0.050 |
-| E5 rules only (U+A+F+R, no text model) | 0.759 | 0.053 | 0.919 | 0.167 | 0.952 | 1.000 | 0.100 |
+| E5 rules only (U+A+F+R, no text model) | 0.759 | 0.053 | 0.919 | 0.167 | 0.941 | 1.000 | 0.125 |
 
 ## Manipulation tactic detection (chat test)
 
@@ -61,7 +61,7 @@ Detection recall: proposed 1.00 vs text-only 0.95
 
 ## Latency (single CPU thread, full pipeline)
 
-mean 4.71 ms, p50 4.237 ms, p95 7.337 ms, p99 14.169 ms, throughput 169.9 msg/s (n=898)
+mean 4.407 ms, p50 4.128 ms, p95 6.288 ms, p99 8.141 ms, throughput 196.3 msg/s (n=898)
 
 ## Uncertainty (bootstrap, 2000 resamples of chat test)
 
@@ -71,7 +71,7 @@ Text-only F1 95% CI [0.71, 0.909]; proposed F1 95% CI [0.932, 1.0]; improvement 
 
 | id | type | S | message |
 |---|---|---|---|
-| B006 | FP | 0.278 | remember to verify your email in Discord settings if you want to chat in the server |
+| B006 | FP | 0.279 | remember to verify your email in Discord settings if you want to chat in the server |
 | B012 | FP | 0.276 | the official merch store link is in the description |
 
 ## Authority cues missed (chat test)
