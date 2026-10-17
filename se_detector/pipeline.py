@@ -51,7 +51,7 @@ class SEDetector:
 
     def analyze(self, message: str, message_id: str | None = None, user_id: str | None = None,
                 channel_id: str | None = None, receiver_id: str | None = None,
-                timestamp: str | None = None) -> dict:
+                timestamp: str | None = None, sender_blocked: bool = False) -> dict:
         t0 = time.perf_counter()
         sig = self.signals(message)
         x = sig["x"]
@@ -60,15 +60,17 @@ class SEDetector:
         is_se = s >= self.tau
         tactics = sig["manipulation"]["tactics"]
         pats = sig["patterns"]["patterns"]
+        message_id = message_id or str(uuid.uuid4())
+        timestamp = timestamp or datetime.now(timezone.utc).isoformat(timespec="seconds")
         return {
             "component": COMPONENT,
             "model_version": self.version,
-            "message_id": message_id or str(uuid.uuid4()),
+            "message_id": message_id,
             "user_id": user_id,
             "channel_id": channel_id,
             # --- for the behavioral analytics component (added by D.M.T. Dissanayaka) ---
             "receiver_id": receiver_id,     # who the message was sent to (DM user, or None for public chat)
-            "timestamp": timestamp or datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "timestamp": timestamp,
             "is_social_engineering": bool(is_se),
             "phishing_probability": round(x["P"], 4),
             "manipulation": {
@@ -86,6 +88,15 @@ class SEDetector:
             },
             "alert": _alert(lvl, tactics, pats) if lvl in severity.ALERT_LEVELS else None,
             "review": _review(tactics, pats) if lvl == "MEDIUM" else None,
+            # --- actions from the component design (added by D.M.T. Dissanayaka) ---
+            "receiver_warning": _receiver_warning(tactics, pats, receiver_id) if lvl in severity.ALERT_LEVELS else None,
+            "behavioral_event": {        # what is forwarded to Behavioral Analytics (Jayarathna); no raw text
+                "message_id": message_id, "user_id": user_id, "receiver_id": receiver_id,
+                "channel_id": channel_id, "timestamp": timestamp,
+                "level": lvl, "score": round(s, 4), "tactics": tactics, "patterns": pats,
+                "sender_blocked": sender_blocked,
+                "repeat_offender": bool(sender_blocked and is_se),
+            },
             "latency_ms": round((time.perf_counter() - t0) * 1000, 3),
         }
 
@@ -107,3 +118,12 @@ def _review(tactics: list[str], pats: list[str]) -> dict:
     why = ", ".join(tactics + [p.replace("_", " ") for p in pats]) or "text model suspects a scam"
     return {"level": "MEDIUM", "summary": f"Possible scam - please review: {why}",
             "recommended_action": "check the message and the sender"}
+
+
+# --- Warning shown to the receiver for HIGH/CRITICAL (added by D.M.T. Dissanayaka) ---
+# In a DM the receiver is one user; in public chat it is everyone in the channel.
+def _receiver_warning(tactics: list[str], pats: list[str], receiver_id: str | None) -> dict:
+    why = ", ".join(tactics + [p.replace("_", " ") for p in pats]) or "suspicious message"
+    return {"show_to": receiver_id or "all viewers in the channel",
+            "text": f"Warning: this message may be a scam ({why}). Never share passwords or codes, "
+                    f"and do not click its links."}

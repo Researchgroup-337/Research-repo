@@ -8,6 +8,10 @@ Endpoints
   POST /analyze           one message  -> detection result (contract: docs/INTEGRATION_CONTRACT.md)
   POST /analyze/batch     up to 200 messages -> list of results (NFR04)
   GET  /alerts            last 100 HIGH/CRITICAL alerts (in-memory, pseudonymous ids only)
+  GET  /events            last 500 behavioral events for Behavioral Analytics (Jayarathna)
+  POST /block             moderator blocks a sender (pseudonymous user_id)
+  POST /unblock           moderator removes a block
+  GET  /blocked           currently blocked user ids
 
 Security notes (NFR05): input length is capped, nothing is written to disk,
 the alert buffer stores only ids + verdicts (not raw message text), and the
@@ -29,6 +33,9 @@ STATIC = Path(__file__).resolve().parent / "static"
 app = FastAPI(title="J26-CS-337 Social Engineering Detector", version="0.4.0")
 detector = SEDetector()
 ALERTS: deque = deque(maxlen=100)
+# --- added by D.M.T. Dissanayaka: block list + events for Behavioral Analytics ---
+BLOCKED: set[str] = set()
+EVENTS: deque = deque(maxlen=500)
 
 
 class Message(BaseModel):
@@ -41,12 +48,19 @@ class Message(BaseModel):
     timestamp: str | None = Field(None, description="when the message was sent (ISO 8601); server time if missing")
 
 
+class BlockRequest(BaseModel):
+    user_id: str = Field(..., min_length=1, max_length=200)
+
+
 class Batch(BaseModel):
     messages: list[Message] = Field(..., max_length=200)
 
 
 def _run(m: Message) -> dict:
-    res = detector.analyze(m.text, m.message_id, m.user_id, m.channel_id, m.receiver_id, m.timestamp)
+    blocked = m.user_id in BLOCKED if m.user_id else False
+    res = detector.analyze(m.text, m.message_id, m.user_id, m.channel_id, m.receiver_id, m.timestamp,
+                           sender_blocked=blocked)
+    EVENTS.appendleft(res["behavioral_event"])      # forwarded to Behavioral Analytics
     if res["alert"]:
         ALERTS.appendleft({k: res[k] for k in ("message_id", "user_id", "channel_id", "receiver_id", "timestamp")} |
                           {"level": res["severity"]["level"], "score": res["severity"]["score"],
@@ -75,6 +89,29 @@ def analyze_batch(b: Batch):
 @app.get("/alerts")
 def alerts():
     return list(ALERTS)
+
+
+@app.get("/events")
+def events():
+    """Behavioral Analytics (Jayarathna) reads this: ids, timestamp, level, tactics. No raw text."""
+    return list(EVENTS)
+
+
+@app.post("/block")
+def block(b: BlockRequest):
+    BLOCKED.add(b.user_id)
+    return {"blocked": b.user_id}
+
+
+@app.post("/unblock")
+def unblock(b: BlockRequest):
+    BLOCKED.discard(b.user_id)
+    return {"unblocked": b.user_id}
+
+
+@app.get("/blocked")
+def blocked():
+    return sorted(BLOCKED)
 
 
 @app.get("/")

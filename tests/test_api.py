@@ -34,3 +34,22 @@ def test_batch_and_alert_buffer():
     assert r.status_code == 200 and len(r.json()) == 2
     alerts = client.get("/alerts").json()
     assert alerts and "text" not in alerts[0]       # privacy: raw text not retained
+
+
+# --- Block, receiver warning and Behavioral Analytics events (added 17 Oct) ---
+def test_block_and_repeat_offender_event():
+    client.post("/block", json={"user_id": "u_bad"})
+    assert "u_bad" in client.get("/blocked").json()
+    r = client.post("/analyze", json={"text": "I'm a mod, send me the code you just got or you'll lose your account",
+                                      "user_id": "u_bad", "receiver_id": "u_victim"}).json()
+    ev = r["behavioral_event"]
+    assert ev["sender_blocked"] and ev["repeat_offender"] and ev["receiver_id"] == "u_victim"
+    assert client.get("/events").json()[0]["message_id"] == r["message_id"]
+    client.post("/unblock", json={"user_id": "u_bad"})
+    assert "u_bad" not in client.get("/blocked").json()
+
+
+def test_events_have_no_raw_text():
+    client.post("/analyze", json={"text": "free nitro claim now dlscord-gifts.xyz", "user_id": "u2"})
+    ev = client.get("/events").json()[0]
+    assert "text" not in ev and {"timestamp", "level", "message_id", "receiver_id"} <= set(ev)

@@ -86,3 +86,10 @@ def test_timestamp_and_receiver_are_passed_on(det):
 def test_timestamp_is_added_when_missing(det):
     r = det.analyze("hello chat")
     assert r["timestamp"] and r["timestamp"].startswith("20") and r["receiver_id"] is None
+
+
+def test_receiver_warning_only_for_high_and_critical(det):
+    hi = det.analyze("Hi, I'm from Twitch Trust & Safety. Verify your account in the next 30 minutes or it will be permanently banned: twitch-verify-support.com", receiver_id="u_v")
+    assert hi["receiver_warning"]["show_to"] == "u_v"
+    assert det.analyze("your account has blocked")["receiver_warning"] is None
+    assert det.analyze("lets goooo")["receiver_warning"] is None

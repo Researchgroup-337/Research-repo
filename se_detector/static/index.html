@@ -52,6 +52,16 @@
   .alert b{color:var(--crit)}
   .review{border:1px solid var(--med);background:var(--med-bg);border-radius:8px;padding:12px 14px;margin-bottom:16px}
   .review b{color:var(--med)}
+  /* --- block / receiver warning / behavioral analytics (added by D.M.T. Dissanayaka) --- */
+  .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  button.block{background:var(--crit)} button.unblock{background:transparent;color:var(--crit);border:1px solid var(--crit)}
+  .note{font-size:14px;color:var(--crit);font-weight:700}
+  .rw{border:1px solid #0B5CAD;background:#EAF2FB;border-radius:8px;padding:12px 14px;margin-bottom:16px}
+  .rw b{color:#0B5CAD}
+  .ba{margin-top:18px;border:1px dashed var(--line);border-radius:8px;padding:10px 14px;background:#FAFBFC}
+  .ba pre{margin:6px 0 0;font:12.5px Consolas,"DejaVu Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
+  .msg .blk{font-size:11px;font-weight:700;color:var(--crit)}
+  select{padding:10px 8px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;max-width:150px}
   .foot{font-size:12px;color:var(--muted);margin-top:14px}
   .stats{display:flex;gap:16px;padding:0 16px 4px;font-size:13px;color:var(--muted);flex-wrap:wrap}
 </style>
@@ -64,13 +74,13 @@
 <main>
   <section class="card chat">
     <h2>Live stream chat</h2>
-    <div class="stats"><span id="st-n">0 messages</span><span id="st-f">0 flagged</span><span id="st-a">0 alerts</span><span id="st-l">– ms avg</span></div>
+    <div class="stats"><span id="st-n">0 messages</span><span id="st-f">0 flagged</span><span id="st-a">0 alerts</span><span id="st-l">– ms avg</span><span id="st-b">0 blocked</span></div>
     <div id="feed"></div>
     <div class="controls">
       <button class="ghost" id="play" type="button">▶ Play demo scenario</button>
       <button class="ghost" id="clear" type="button">Clear</button>
     </div>
-    <form id="f"><input id="in" placeholder="Type a chat message as a viewer…" autocomplete="off" maxlength="2000"><button>Send</button></form>
+    <form id="f"><select id="to" title="Who receives the message"><option value="">to: everyone</option><option value="kavi_99">DM → kavi_99</option><option value="nethmi.lk">DM → nethmi.lk</option></select><input id="in" placeholder="Type a chat message as a viewer…" autocomplete="off" maxlength="2000"><button>Send</button></form>
   </section>
   <section class="card panel">
     <h2>Moderator view — why was this flagged?</h2>
@@ -90,6 +100,7 @@ const SCENARIO = [
   ["crypto_king","Double your Bitcoin! Send 0.05 BTC to this wallet and get 0.1 back instantly, only 5 spots left"],
   ["ishara","I'm so scared of this boss fight omg"],
 ];
+const blockedUsers = new Set();
 const results = {}; let n=0, flagged=0, alerts=0, latSum=0, sel=null;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const $ = id => document.getElementById(id);
@@ -98,25 +109,27 @@ fetch("/health").then(r=>r.json()).then(h=>{
   $("meta").textContent = `model v${h.model_version} · threshold τ=${h.threshold} · weights P ${h.weights.P}, U ${h.weights.U}, A ${h.weights.A}, F ${h.weights.F}, R ${h.weights.R}`;
 }).catch(()=>{$("meta").textContent="API offline — start: uvicorn se_detector.api:app"});
 
-async function send(user, text){
+async function send(user, text, receiver=""){
   const id = "m" + (++n);
   const row = document.createElement("div");
   row.className = "msg"; row.dataset.id = id;
-  row.innerHTML = `<span class="u" style="color:${color(user)}">${esc(user)}</span><span class="t">${esc(text)}</span><span class="b lv-LOW">…</span>`;
+  row.dataset.user = user;
+  row.innerHTML = `<span class="u" style="color:${color(user)}">${esc(user)}${blockedUsers.has(user) ? ' <span class="blk">🚫 blocked</span>' : ""}</span><span class="t">${receiver ? `<i>(DM → ${esc(receiver)})</i> ` : ""}${esc(text)}</span><span class="b lv-LOW">…</span>`;
   row.onclick = () => show(id);
   $("feed").appendChild(row); $("feed").scrollTop = 1e9;
   try{
     const r = await fetch("/analyze",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({text, message_id:id, user_id:"u_"+hash(user), channel_id:"demo"})});
+      body:JSON.stringify({text, message_id:id, user_id:"u_"+hash(user), channel_id:"demo",
+                          receiver_id: receiver ? "u_"+hash(receiver) : null})});
     if(!r.ok) throw new Error(r.status);
-    const res = await r.json(); results[id] = {res, user, text};
+    const res = await r.json(); results[id] = {res, user, text, receiver};
     const lv = res.severity.level;
     row.classList.add(lv);
     row.querySelector(".b").className = "b lv-"+lv; row.querySelector(".b").textContent = lv;
     latSum += res.latency_ms; if(res.is_social_engineering) flagged++; if(res.alert) alerts++;
     $("st-n").textContent = `${n} messages`; $("st-f").textContent = `${flagged} flagged`;
     $("st-a").textContent = `${alerts} alerts`; $("st-l").textContent = `${(latSum/n).toFixed(1)} ms avg`;
-    if(res.alert || sel===null) show(id);
+    if(res.alert || res.behavioral_event.repeat_offender || sel===null) show(id);
   }catch(e){ row.querySelector(".b").textContent = "error"; }
 }
 
@@ -135,6 +148,11 @@ function show(id){
   $("detail").innerHTML = `
     <div class="quote"><b>${esc(d.user)}:</b> ${esc(d.text)}</div>
     ${r.alert ? `<div class="alert"><b>⚠ ALERT — ${esc(r.alert.level)}</b><br>${esc(r.alert.summary)}<br>Recommended action: <b>${esc(r.alert.recommended_action)}</b></div>` : ""}
+    ${lv !== "LOW" ? `<div class="actions">${blockedUsers.has(d.user)
+        ? `<button class="unblock" data-u="${esc(d.user)}" onclick="toggleBlock(this.dataset.u, false)">Unblock ${esc(d.user)}</button>`
+        : `<button class="block" data-u="${esc(d.user)}" onclick="toggleBlock(this.dataset.u, true)">🚫 Block sender (${esc(d.user)})</button>`}
+      ${r.behavioral_event.repeat_offender ? `<span class="note">⛔ Blocked sender sent again → reported to Behavioral Analytics as repeat offender</span>` : ""}</div>` : ""}
+    ${r.receiver_warning ? `<div class="rw"><b>📩 WARNING SENT TO ${esc(d.receiver ? d.receiver : "ALL VIEWERS")}</b><br>${esc(r.receiver_warning.text)}</div>` : ""}
     ${r.review ? `<div class="review"><b>👁 REVIEW — ${esc(r.review.level)}</b><br>${esc(r.review.summary)}<br>Recommended action: <b>${esc(r.review.recommended_action)}</b></div>` : ""}
     <div class="verdict"><span class="lvl lv-${lv}">${lv}</span>
       <span class="score">Severity S = <b>${s.score.toFixed(2)}</b> &nbsp;·&nbsp; ${r.is_social_engineering ? "flagged as social engineering" : "not flagged"} (τ = ${s.threshold})</span></div>
@@ -144,13 +162,25 @@ function show(id){
       <div><h3>Attack patterns</h3>${pats}<ul class="ev">${pev}</ul></div>
     </div>
     <h3 style="margin-top:18px">What contributed to S = Σ wᵢ·xᵢ</h3>${bars}
-    <div class="foot">Phishing probability P = ${r.phishing_probability.toFixed(3)} · URLs forwarded to URL-verification component: ${r.urls.length ? r.urls.map(esc).join(", ") : "none"} · analysed in ${r.latency_ms} ms · model v${esc(r.model_version)}</div>`;
+    <div class="foot">Phishing probability P = ${r.phishing_probability.toFixed(3)} · URLs forwarded to URL-verification component: ${r.urls.length ? r.urls.map(esc).join(", ") : "none"} · analysed in ${r.latency_ms} ms · model v${esc(r.model_version)}</div>
+    <div class="ba"><h3 style="margin:0">→ Forwarded to Behavioral Analytics (Jayarathna) · no message text</h3><pre>${esc(JSON.stringify(r.behavioral_event, null, 2))}</pre></div>`;
+}
+async function toggleBlock(user, on){
+  await fetch(on ? "/block" : "/unblock", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({user_id:"u_"+hash(user)})});
+  on ? blockedUsers.add(user) : blockedUsers.delete(user);
+  document.querySelectorAll(`.msg[data-user="${CSS.escape(user)}"] .u`).forEach(e => {
+    e.innerHTML = esc(user) + (on ? ' <span class="blk">🚫 blocked</span>' : "");
+    e.style.color = color(user);
+  });
+  $("st-b").textContent = `${blockedUsers.size} blocked`;
+  if(sel) show(sel);
 }
 function hash(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h.toString(16)}
 function color(u){const c=["#007F76","#0B5CAD","#7A3EB1","#B4480B","#2F6B2F","#B3122E"];return c[parseInt(hash(u),16)%c.length]}
-$("f").onsubmit = e => { e.preventDefault(); const v=$("in").value.trim(); if(v){ send("you", v); $("in").value=""; } };
+$("f").onsubmit = e => { e.preventDefault(); const v=$("in").value.trim(); if(v){ send("you", v, $("to").value); $("in").value=""; } };
 $("play").onclick = async () => { $("play").disabled = true; for(const [u,t] of SCENARIO){ await send(u,t); await new Promise(r=>setTimeout(r,900)); } $("play").disabled = false; };
 $("clear").onclick = () => { $("feed").innerHTML=""; $("detail").innerHTML='<div class="empty">Cleared.</div>'; n=flagged=alerts=latSum=0; sel=null; ["st-n","st-f","st-a"].forEach(i=>$(i).textContent="0"); };
+// Note: blocking here is our component's own block list (a real platform ban needs moderator API access: planned for PP2).
 </script>
 </body>
 </html>
