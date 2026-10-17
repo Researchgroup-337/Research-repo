@@ -61,4 +61,28 @@ def test_normal_chat_not_flagged(det, text):
 ])
 def test_livechat_scams_flagged(det, text):
     assert det.analyze(text)["is_social_engineering"]
-    
+
+
+# --- Review notice (added after user feedback, 17 Oct) ---
+def test_medium_gets_review_notice_not_alert(det):
+    r = det.analyze("your account has blocked")
+    assert r["severity"]["level"] == "MEDIUM"
+    assert r["review"] is not None and r["alert"] is None
+
+
+def test_low_and_high_have_no_review(det):
+    assert det.analyze("lets goooo that clutch was insane")["review"] is None
+    r = det.analyze("Hi, I'm from Twitch Trust & Safety. Verify your account in the next 30 minutes or it will be permanently banned: twitch-verify-support.com")
+    assert r["alert"] is not None and r["review"] is None
+
+
+# --- Timestamp and receiver id for behavioral analytics (added 17 Oct) ---
+def test_timestamp_and_receiver_are_passed_on(det):
+    r = det.analyze("send me the code you just got", user_id="u1", receiver_id="u2",
+                    timestamp="2026-10-17T14:00:00+00:00")
+    assert r["receiver_id"] == "u2" and r["timestamp"] == "2026-10-17T14:00:00+00:00"
+
+
+def test_timestamp_is_added_when_missing(det):
+    r = det.analyze("hello chat")
+    assert r["timestamp"] and r["timestamp"].startswith("20") and r["receiver_id"] is None

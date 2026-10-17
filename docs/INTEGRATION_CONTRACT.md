@@ -8,7 +8,7 @@
 Live chat → Data Acquisition (shared) → ┬→ Malicious URL Verification (Gunarathna)
                                         ├→ Hate Speech Detection (Mendis)
                                         ├→ SOCIAL ENGINEERING DETECTION (this component)
-                                        └→ (all verdicts) → Behavioral Analytics + Risk (Jayarathna) → Dashboard
+                                        └→ (all verdicts) → Harassment Detection + Behavioral Analytics + Risk Score (Jayarathna) → Dashboard
 ```
 
 ## Input (produced by Data Acquisition, owner: shared)
@@ -21,6 +21,8 @@ Live chat → Data Acquisition (shared) → ┬→ Malicious URL Verification (G
 | `message_id` | string | no | generated (UUID) if absent |
 | `user_id` | string | no | **pseudonymous** id only, never a real username |
 | `channel_id` | string | no | stream/channel id |
+| `receiver_id` | string | no | **pseudonymous** id of the receiver (DMs); empty for public chat |
+| `timestamp` | string | no | ISO 8601 send time; the server's time (UTC) is used if missing |
 
 Batch: `POST /analyze/batch` with `{"messages": [ ...up to 200 ]}`.
 
@@ -51,7 +53,7 @@ Real output for: *"Hi, I'm from Twitch Trust & Safety. Your channel was reported
 
 | consumer | fields used |
 |---|---|
-| Behavioral Analytics (Jayarathna) | `user_id`, `severity.score`, `severity.level`, `manipulation.tactics`: an extra risk signal for repeat-offender scoring |
+| Behavioral Analytics (Jayarathna) | `user_id`, `receiver_id`, `timestamp`, `severity.score`, `severity.level`, `manipulation.tactics`: an extra risk signal for repeat-offender scoring (raw text is **not** forwarded, for privacy) |
 | URL Verification (Gunarathna) | `urls`: deep check (blacklist, homograph, sandbox). This component only does cheap local URL heuristics |
 | Dashboard / reports | `alert`, `severity`, `manipulation.evidence` (the "why") |
 

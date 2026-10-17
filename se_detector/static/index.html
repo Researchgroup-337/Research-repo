@@ -50,6 +50,8 @@
   .bar .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
   .alert{border:1px solid var(--red);background:var(--red-l);border-radius:8px;padding:12px 14px;margin-bottom:16px}
   .alert b{color:var(--crit)}
+  .review{border:1px solid var(--med);background:var(--med-bg);border-radius:8px;padding:12px 14px;margin-bottom:16px}
+  .review b{color:var(--med)}
   .foot{font-size:12px;color:var(--muted);margin-top:14px}
   .stats{display:flex;gap:16px;padding:0 16px 4px;font-size:13px;color:var(--muted);flex-wrap:wrap}
 </style>
@@ -133,6 +135,7 @@ function show(id){
   $("detail").innerHTML = `
     <div class="quote"><b>${esc(d.user)}:</b> ${esc(d.text)}</div>
     ${r.alert ? `<div class="alert"><b>⚠ ALERT — ${esc(r.alert.level)}</b><br>${esc(r.alert.summary)}<br>Recommended action: <b>${esc(r.alert.recommended_action)}</b></div>` : ""}
+    ${r.review ? `<div class="review"><b>👁 REVIEW — ${esc(r.review.level)}</b><br>${esc(r.review.summary)}<br>Recommended action: <b>${esc(r.review.recommended_action)}</b></div>` : ""}
     <div class="verdict"><span class="lvl lv-${lv}">${lv}</span>
       <span class="score">Severity S = <b>${s.score.toFixed(2)}</b> &nbsp;·&nbsp; ${r.is_social_engineering ? "flagged as social engineering" : "not flagged"} (τ = ${s.threshold})</span></div>
     <div class="meter"><i style="left:calc(${Math.min(1,s.score)*100}% - 2px)"></i></div>

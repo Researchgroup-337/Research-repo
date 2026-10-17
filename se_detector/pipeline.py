@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import time
 import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 
 import joblib
@@ -43,13 +44,14 @@ class SEDetector:
         r = patterns.detect(c.text, c.urls)
         x = {"P": p, "U": m["scores"]["urgency"], "A": m["scores"]["authority"],
              "F": m["scores"]["fear"], "R": r["risk"]}
-                     # Protective advice without a link is a warning, not an attack: damp all signals.
+        # Protective advice without a link is a warning, not an attack: damp all signals.
         if patterns.is_protective_advice(c.text) and not c.urls:
             x = {k: v * PROTECTIVE_DAMPING for k, v in x.items()}
         return {"clean": c, "x": x, "manipulation": m, "patterns": r}
 
     def analyze(self, message: str, message_id: str | None = None, user_id: str | None = None,
-                channel_id: str | None = None) -> dict:
+                channel_id: str | None = None, receiver_id: str | None = None,
+                timestamp: str | None = None) -> dict:
         t0 = time.perf_counter()
         sig = self.signals(message)
         x = sig["x"]
@@ -64,6 +66,9 @@ class SEDetector:
             "message_id": message_id or str(uuid.uuid4()),
             "user_id": user_id,
             "channel_id": channel_id,
+            # --- for the behavioral analytics component (added by D.M.T. Dissanayaka) ---
+            "receiver_id": receiver_id,     # who the message was sent to (DM user, or None for public chat)
+            "timestamp": timestamp or datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "is_social_engineering": bool(is_se),
             "phishing_probability": round(x["P"], 4),
             "manipulation": {
@@ -80,6 +85,7 @@ class SEDetector:
                 "contributions": severity.contributions(x, self.weights),
             },
             "alert": _alert(lvl, tactics, pats) if lvl in severity.ALERT_LEVELS else None,
+            "review": _review(tactics, pats) if lvl == "MEDIUM" else None,
             "latency_ms": round((time.perf_counter() - t0) * 1000, 3),
         }
 
@@ -92,3 +98,12 @@ def _alert(level: str, tactics: list[str], pats: list[str]) -> dict:
     why = ", ".join(tactics + [p.replace("_", " ") for p in pats]) or "high text-model probability"
     action = "remove message and timeout sender" if level == "CRITICAL" else "review message"
     return {"level": level, "summary": f"{level.title()} social-engineering risk: {why}", "recommended_action": action}
+
+
+# --- Review notice for MEDIUM (added by D.M.T. Dissanayaka after user feedback) ---
+# 9 of 18 users asked to be warned from MEDIUM. A full alert would add false
+# alarms, so MEDIUM messages get a softer "please review" notice instead.
+def _review(tactics: list[str], pats: list[str]) -> dict:
+    why = ", ".join(tactics + [p.replace("_", " ") for p in pats]) or "text model suspects a scam"
+    return {"level": "MEDIUM", "summary": f"Possible scam - please review: {why}",
+            "recommended_action": "check the message and the sender"}

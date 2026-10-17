@@ -36,6 +36,9 @@ class Message(BaseModel):
     message_id: str | None = None
     user_id: str | None = Field(None, description="pseudonymous user id from the acquisition layer")
     channel_id: str | None = None
+    # --- for the behavioral analytics component (added by D.M.T. Dissanayaka) ---
+    receiver_id: str | None = Field(None, description="pseudonymous id of the receiver (DMs); None for public chat")
+    timestamp: str | None = Field(None, description="when the message was sent (ISO 8601); server time if missing")
 
 
 class Batch(BaseModel):
@@ -43,9 +46,9 @@ class Batch(BaseModel):
 
 
 def _run(m: Message) -> dict:
-    res = detector.analyze(m.text, m.message_id, m.user_id, m.channel_id)
+    res = detector.analyze(m.text, m.message_id, m.user_id, m.channel_id, m.receiver_id, m.timestamp)
     if res["alert"]:
-        ALERTS.appendleft({k: res[k] for k in ("message_id", "user_id", "channel_id")} |
+        ALERTS.appendleft({k: res[k] for k in ("message_id", "user_id", "channel_id", "receiver_id", "timestamp")} |
                           {"level": res["severity"]["level"], "score": res["severity"]["score"],
                            "tactics": res["manipulation"]["tactics"], "patterns": res["patterns"]["detected"]})
     return res
