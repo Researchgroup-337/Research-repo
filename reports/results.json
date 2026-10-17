@@ -710,12 +710,12 @@
   },
   "latency_ms": {
     "n": 898,
-    "mean": 8.306,
-    "p50": 6.345,
-    "p95": 14.773,
-    "p99": 30.104,
-    "max": 258.863,
-    "throughput_msgs_per_s": 158.2
+    "mean": 4.71,
+    "p50": 4.237,
+    "p95": 7.337,
+    "p99": 14.169,
+    "max": 22.635,
+    "throughput_msgs_per_s": 169.9
   },
   "bootstrap_chat_f1": {
     "text_only_ci": [

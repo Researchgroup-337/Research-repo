@@ -61,7 +61,7 @@ Detection recall: proposed 1.00 vs text-only 0.95
 
 ## Latency (single CPU thread, full pipeline)
 
-mean 8.306 ms, p50 6.345 ms, p95 14.773 ms, p99 30.104 ms, throughput 158.2 msg/s (n=898)
+mean 4.71 ms, p50 4.237 ms, p95 7.337 ms, p99 14.169 ms, throughput 169.9 msg/s (n=898)
 
 ## Uncertainty (bootstrap, 2000 resamples of chat test)
 

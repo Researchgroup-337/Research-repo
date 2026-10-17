@@ -103,6 +103,8 @@ def url_signals(urls: list[str]) -> dict:
 
 
 def detect(text: str, urls: list[str] | None = None) -> dict:
+           # "0.05 BTC": a dot between digits is not a sentence end (added by D.M.T. Dissanayaka)
+       text = re.sub(r"(?<=\d)\.(?=\d)", ",", text)
     """Detect SE patterns. ``R`` (risk) combines pattern and URL evidence in [0,1]."""
     urls = urls or []
     found: dict[str, list[str]] = {}

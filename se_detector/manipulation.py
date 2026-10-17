@@ -72,7 +72,7 @@ CUES: dict[str, list[tuple[str, float, str]]] = {
            (r"\b(?:mr ?beast|elon|musk|pewdiepie|ninja|xqc|kai cenat|ishowspeed)\b", 0.4, "celebrity name"),
     ],
     "fear": [
-        (r"\b(?:your|ur)\s(?:\w+\s){0,3}(?:will|would|is going to|gonna|has been|have been|was|is|are) (?:be )?(?:permanently )?"
+                 (r"\b(?:your|ur)\s(?:\w+\s){0,3}(?:will|would|is going to|gonna|has been|have been|has|have|got|was|is|are) (?:be )?(?:permanently )?"
          r"(?:banned|suspended|terminated|locked|disabled|deleted|closed|removed|blocked|frozen|blacklisted|flagged|compromised|hacked|leaked|charged|encrypted|stolen)",
          1.2, "threat to the reader's account/asset"),
         (r"\b(?:or|otherwise|unless)\b[^.!?]{0,60}\b(?:banned|suspended|terminated|locked|disabled|deleted|removed|lose|lost|muted|arrest|returned|encrypted|charged|send them)", 1.0, "'or else' consequence"),
