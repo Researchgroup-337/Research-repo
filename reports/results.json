@@ -169,10 +169,10 @@
       },
       "weights": {
         "P": 0.4596,
-        "U": 0.1228,
-        "A": 0.1156,
-        "F": 0.0903,
-        "R": 0.2118
+        "U": 0.1227,
+        "A": 0.1153,
+        "F": 0.0904,
+        "R": 0.2119
       },
       "tau": 0.17
     },
@@ -232,26 +232,26 @@
         ]
       },
       "weights": {
-        "P": 0.5112,
+        "P": 0.5113,
         "U": 0.0,
-        "A": 0.127,
-        "F": 0.1173,
-        "R": 0.2445
+        "A": 0.1265,
+        "F": 0.1174,
+        "R": 0.2448
       },
       "tau": 0.19
     },
     "E5 without authority": {
       "sms_test": {
-        "accuracy": 0.9824,
-        "precision": 0.8835,
+        "accuracy": 0.9837,
+        "precision": 0.8922,
         "recall": 0.9891,
-        "f1": 0.9333,
-        "fpr": 0.0186,
+        "f1": 0.9381,
+        "fpr": 0.017,
         "fnr": 0.0109,
         "cm": [
           [
-            634,
-            12
+            635,
+            11
           ],
           [
             1,
@@ -297,10 +297,10 @@
       },
       "weights": {
         "P": 0.5013,
-        "U": 0.1348,
+        "U": 0.1345,
         "A": 0.0,
         "F": 0.1185,
-        "R": 0.2455
+        "R": 0.2457
       },
       "tau": 0.19
     },
@@ -488,9 +488,9 @@
         ]
       },
       "weights": {
-        "P": 0.58,
-        "U": 0.1557,
-        "A": 0.1656,
+        "P": 0.5801,
+        "U": 0.1556,
+        "A": 0.1655,
         "F": 0.0988,
         "R": 0.0
       },
@@ -553,20 +553,20 @@
       },
       "weights": {
         "P": 0.0,
-        "U": 0.1427,
-        "A": 0.0482,
-        "F": 0.229,
-        "R": 0.5801
+        "U": 0.1426,
+        "A": 0.0474,
+        "F": 0.2288,
+        "R": 0.5811
       },
       "tau": 0.12
     }
   },
   "weights": {
     "P": 0.4596,
-    "U": 0.1228,
-    "A": 0.1156,
-    "F": 0.0903,
-    "R": 0.2118
+    "U": 0.1227,
+    "A": 0.1153,
+    "F": 0.0904,
+    "R": 0.2119
   },
   "tau": 0.17,
   "tactics_chat_test": {
@@ -578,8 +578,8 @@
     },
     "authority": {
       "precision": 1.0,
-      "recall": 0.4,
-      "f1": 0.5714,
+      "recall": 0.45,
+      "f1": 0.6207,
       "support": 20
     },
     "fear": {
@@ -710,12 +710,12 @@
   },
   "latency_ms": {
     "n": 898,
-    "mean": 5.009,
-    "p50": 4.648,
-    "p95": 8.802,
-    "p99": 11.135,
-    "max": 17.642,
-    "throughput_msgs_per_s": 236.5
+    "mean": 8.306,
+    "p50": 6.345,
+    "p95": 14.773,
+    "p99": 30.104,
+    "max": 258.863,
+    "throughput_msgs_per_s": 158.2
   },
   "bootstrap_chat_f1": {
     "text_only_ci": [
@@ -757,7 +757,6 @@
     "Your Netflix payment failed. Update your billing info within 24h or your account will be suspended: netflix-billing-update.com",
     "don't tell anyone but the moderator team is giving secret VIP to people who verify their card at vip-pass.site",
     "Security alert from Discord: someone tried to access your account. If this wasn't you, log in here to secure it: discordapp-secure.com",
-    "Your package could not be delivered. Pay the customs fee now or it will be returned: dhl-redelivery.info",
-    "Riot Games: you have been selected for a ban appeal. Provide your login details to avoid permanent suspension"
+    "Your package could not be delivered. Pay the customs fee now or it will be returned: dhl-redelivery.info"
   ]
 }

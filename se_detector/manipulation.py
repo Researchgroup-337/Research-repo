@@ -66,6 +66,10 @@ CUES: dict[str, list[tuple[str, float, str]]] = {
         (r"\bofficial\b", 0.4, "'official'"),
         (rf"\b(?:{_BRANDS})\b", 0.25, "brand mention"),
         (r"\bdear (?:customer|user|member|voucher holder)\b", 0.5, "institutional salutation"),
+                   # --- live-stream chat cues (added by D.M.T. Dissanayaka) ---
+           (r"^\W*(?:discord|twitch|youtube|steam|riot(?: games)?|epic games|roblox)\s*[:|-]", 1.0, "platform name used as sender"),
+           (r"\b\w*(?:support|staff|admin|mod|team|official)\w*#\d{4}\b", 1.0, "fake support handle"),
+           (r"\b(?:mr ?beast|elon|musk|pewdiepie|ninja|xqc|kai cenat|ishowspeed)\b", 0.4, "celebrity name"),
     ],
     "fear": [
         (r"\b(?:your|ur)\s(?:\w+\s){0,3}(?:will|would|is going to|gonna|has been|have been|was|is|are) (?:be )?(?:permanently )?"
@@ -81,6 +85,8 @@ CUES: dict[str, list[tuple[str, float, str]]] = {
         (r"\bto avoid\b[^.!?]{0,30}\b(?:loss|arrest|ban|suspension|penalt\w*|charges?|termination|deletion)\b", 0.9, "'to avoid' consequence"),
         (r"\b(?:permanently|forever)\b", 0.4, "permanence"),
         (r"\bwarning\b|\balert\b|\bdo not ignore\b", 0.4, "alarm wording"),
+                   # --- live-stream chat cues (added by D.M.T. Dissanayaka) ---
+           (r"\b(?:accidentally|mistakenly|wrongly) reported (?:your|ur|you)\b", 1.2, "'I accidentally reported you' scam"),
     ],
 }
 

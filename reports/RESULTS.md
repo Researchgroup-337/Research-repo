@@ -1,6 +1,6 @@
 # Evaluation results
 
-Model version 0.4.0. Weights {'P': 0.4596, 'U': 0.1228, 'A': 0.1156, 'F': 0.0903, 'R': 0.2118}, threshold tau=0.17.
+Model version 0.4.0. Weights {'P': 0.4596, 'U': 0.1227, 'A': 0.1153, 'F': 0.0904, 'R': 0.2119}, threshold tau=0.17.
 Test-set sizes: {'sms_test': 738, 'chat_test': 80, 'zenodo_test': 87}
 
 ## Detection (held-out test sets)
@@ -11,7 +11,7 @@ Test-set sizes: {'sms_test': 738, 'chat_test': 80, 'zenodo_test': 87}
 | E2 TF-IDF+SVM (text only) | 0.958 | 0.011 | 0.984 | 0.083 | 0.853 | 0.800 | 0.075 |
 | E4 Proposed hybrid (P+U+A+F+R) | 0.933 | 0.019 | 0.977 | 0.125 | 0.976 | 1.000 | 0.050 |
 | E5 without urgency | 0.938 | 0.017 | 0.977 | 0.125 | 0.950 | 0.950 | 0.050 |
-| E5 without authority | 0.933 | 0.019 | 0.977 | 0.125 | 0.976 | 1.000 | 0.050 |
+| E5 without authority | 0.938 | 0.017 | 0.977 | 0.125 | 0.976 | 1.000 | 0.050 |
 | E5 without fear | 0.938 | 0.017 | 0.977 | 0.125 | 0.950 | 0.950 | 0.050 |
 | E5 without all manipulation (P+R) | 0.943 | 0.015 | 0.977 | 0.125 | 0.937 | 0.925 | 0.050 |
 | E5 without pattern risk (P+U+A+F) | 0.953 | 0.012 | 0.984 | 0.083 | 0.909 | 0.875 | 0.050 |
@@ -22,7 +22,7 @@ Test-set sizes: {'sms_test': 738, 'chat_test': 80, 'zenodo_test': 87}
 | Tactic | Precision | Recall | F1 | Support |
 |---|---|---|---|---|
 | urgency | 0.870 | 0.909 | 0.889 | 22 |
-| authority | 1.000 | 0.400 | 0.571 | 20 |
+| authority | 1.000 | 0.450 | 0.621 | 20 |
 | fear | 0.867 | 1.000 | 0.929 | 13 |
 
 ## Flag rate by attack type (chat test)
@@ -61,7 +61,7 @@ Detection recall: proposed 1.00 vs text-only 0.95
 
 ## Latency (single CPU thread, full pipeline)
 
-mean 5.009 ms, p50 4.648 ms, p95 8.802 ms, p99 11.135 ms, throughput 236.5 msg/s (n=898)
+mean 8.306 ms, p50 6.345 ms, p95 14.773 ms, p99 30.104 ms, throughput 158.2 msg/s (n=898)
 
 ## Uncertainty (bootstrap, 2000 resamples of chat test)
 
@@ -87,4 +87,3 @@ Text-only F1 95% CI [0.71, 0.909]; proposed F1 95% CI [0.932, 1.0]; improvement 
 - don't tell anyone but the moderator team is giving secret VIP to people who verify their card at vip-pass.site
 - Security alert from Discord: someone tried to access your account. If this wasn't you, log in here to secure it: discordapp-secure.com
 - Your package could not be delivered. Pay the customs fee now or it will be returned: dhl-redelivery.info
-- Riot Games: you have been selected for a ban appeal. Provide your login details to avoid permanent suspension
