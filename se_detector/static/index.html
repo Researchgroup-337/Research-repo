@@ -61,7 +61,9 @@
   .ba{margin-top:18px;border:1px dashed var(--line);border-radius:8px;padding:10px 14px;background:#FAFBFC}
   .ba pre{margin:6px 0 0;font:12.5px Consolas,"DejaVu Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
   .msg .blk{font-size:11px;font-weight:700;color:var(--crit)}
-  select{padding:10px 8px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;max-width:150px}
+  form{flex-direction:column} .row{display:flex;gap:8px} .row label{font-size:12px;color:var(--muted);align-self:center;white-space:nowrap}
+  .row input{min-width:0} #from{flex:0 0 38%} #to{flex:1}
+  .nowarn{border:1px dashed var(--med);border-radius:8px;padding:8px 12px;margin-bottom:16px;font-size:14px;color:var(--med)}
   .foot{font-size:12px;color:var(--muted);margin-top:14px}
   .stats{display:flex;gap:16px;padding:0 16px 4px;font-size:13px;color:var(--muted);flex-wrap:wrap}
 </style>
@@ -80,7 +82,12 @@
       <button class="ghost" id="play" type="button">▶ Play demo scenario</button>
       <button class="ghost" id="clear" type="button">Clear</button>
     </div>
-    <form id="f"><select id="to" title="Who receives the message"><option value="">to: everyone</option><option value="kavi_99">DM → kavi_99</option><option value="nethmi.lk">DM → nethmi.lk</option></select><input id="in" placeholder="Type a chat message as a viewer…" autocomplete="off" maxlength="2000"><button>Send</button></form>
+    <form id="f">
+      <div class="row"><label for="from">From</label><input id="from" value="viewer" maxlength="40" autocomplete="off" title="Sender name (any name)">
+        <label for="to">To</label><input id="to" list="users" placeholder="everyone, or a name for DM" maxlength="40" autocomplete="off"></div>
+      <div class="row"><input id="in" placeholder="Type any message to test it…" autocomplete="off" maxlength="2000"><button>Send</button></div>
+      <datalist id="users"></datalist>
+    </form>
   </section>
   <section class="card panel">
     <h2>Moderator view — why was this flagged?</h2>
@@ -101,6 +108,9 @@ const SCENARIO = [
   ["ishara","I'm so scared of this boss fight omg"],
 ];
 const blockedUsers = new Set();
+const knownUsers = new Set();      // everyone seen in chat -> DM receiver list (dynamic)
+function addUser(u){ if(!u || knownUsers.has(u)) return; knownUsers.add(u);
+  $("users").innerHTML = [...knownUsers].sort().map(x=>`<option value="${esc(x)}">`).join(""); }
 const results = {}; let n=0, flagged=0, alerts=0, latSum=0, sel=null;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const $ = id => document.getElementById(id);
@@ -111,6 +121,7 @@ fetch("/health").then(r=>r.json()).then(h=>{
 
 async function send(user, text, receiver=""){
   const id = "m" + (++n);
+  addUser(user); addUser(receiver);
   const row = document.createElement("div");
   row.className = "msg"; row.dataset.id = id;
   row.dataset.user = user;
@@ -153,6 +164,7 @@ function show(id){
         : `<button class="block" data-u="${esc(d.user)}" onclick="toggleBlock(this.dataset.u, true)">🚫 Block sender (${esc(d.user)})</button>`}
       ${r.behavioral_event.repeat_offender ? `<span class="note">⛔ Blocked sender sent again → reported to Behavioral Analytics as repeat offender</span>` : ""}</div>` : ""}
     ${r.receiver_warning ? `<div class="rw"><b>📩 WARNING SENT TO ${esc(d.receiver ? d.receiver : "ALL VIEWERS")}</b><br>${esc(r.receiver_warning.text)}</div>` : ""}
+    ${!r.receiver_warning && d.receiver && lv !== "LOW" ? `<div class="nowarn">No warning sent to ${esc(d.receiver)} yet: ${esc(lv)} messages go to moderator review first (receiver warnings are sent for HIGH / CRITICAL).</div>` : ""}
     ${r.review ? `<div class="review"><b>👁 REVIEW — ${esc(r.review.level)}</b><br>${esc(r.review.summary)}<br>Recommended action: <b>${esc(r.review.recommended_action)}</b></div>` : ""}
     <div class="verdict"><span class="lvl lv-${lv}">${lv}</span>
       <span class="score">Severity S = <b>${s.score.toFixed(2)}</b> &nbsp;·&nbsp; ${r.is_social_engineering ? "flagged as social engineering" : "not flagged"} (τ = ${s.threshold})</span></div>
@@ -177,7 +189,7 @@ async function toggleBlock(user, on){
 }
 function hash(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h.toString(16)}
 function color(u){const c=["#007F76","#0B5CAD","#7A3EB1","#B4480B","#2F6B2F","#B3122E"];return c[parseInt(hash(u),16)%c.length]}
-$("f").onsubmit = e => { e.preventDefault(); const v=$("in").value.trim(); if(v){ send("you", v, $("to").value); $("in").value=""; } };
+$("f").onsubmit = e => { e.preventDefault(); const v=$("in").value.trim(); if(v){ send($("from").value.trim() || "viewer", v, $("to").value.trim()); $("in").value=""; $("in").focus(); } };
 $("play").onclick = async () => { $("play").disabled = true; for(const [u,t] of SCENARIO){ await send(u,t); await new Promise(r=>setTimeout(r,900)); } $("play").disabled = false; };
 $("clear").onclick = () => { $("feed").innerHTML=""; $("detail").innerHTML='<div class="empty">Cleared.</div>'; n=flagged=alerts=latSum=0; sel=null; ["st-n","st-f","st-a"].forEach(i=>$(i).textContent="0"); };
 // Note: blocking here is our component's own block list (a real platform ban needs moderator API access: planned for PP2).
