@@ -12,6 +12,8 @@ Endpoints
   POST /block             moderator blocks a sender (pseudonymous user_id)
   POST /unblock           moderator removes a block
   GET  /blocked           currently blocked user ids
+  POST /warn              moderator sends the prepared warning to the receiver (DM user or whole channel)
+  GET  /warnings          warnings sent so far (what the platform connector would deliver)
 
 Security notes (NFR05): input length is capped, nothing is written to disk,
 the alert buffer stores only ids + verdicts (not raw message text), and the
@@ -36,6 +38,7 @@ ALERTS: deque = deque(maxlen=100)
 # --- added by D.M.T. Dissanayaka: block list + events for Behavioral Analytics ---
 BLOCKED: set[str] = set()
 EVENTS: deque = deque(maxlen=500)
+WARNINGS: deque = deque(maxlen=200)
 
 
 class Message(BaseModel):
@@ -50,6 +53,13 @@ class Message(BaseModel):
 
 class BlockRequest(BaseModel):
     user_id: str = Field(..., min_length=1, max_length=200)
+
+
+class WarnRequest(BaseModel):
+    message_id: str = Field(..., min_length=1, max_length=200)
+    receiver_id: str | None = Field(None, max_length=200, description="DM receiver; None = all viewers in the channel")
+    channel_id: str | None = Field(None, max_length=200)
+    text: str = Field(..., min_length=1, max_length=500)
 
 
 class Batch(BaseModel):
@@ -112,6 +122,23 @@ def unblock(b: BlockRequest):
 @app.get("/blocked")
 def blocked():
     return sorted(BLOCKED)
+
+
+@app.post("/warn")
+def warn(w: WarnRequest):
+    """Send the prepared warning. In the integrated system the platform connector
+    (Discord / Twitch / YouTube) delivers it; here it is recorded and shown in the chat."""
+    from datetime import datetime, timezone
+    item = {"message_id": w.message_id, "show_to": w.receiver_id or "all viewers in the channel",
+            "receiver_id": w.receiver_id, "channel_id": w.channel_id, "text": w.text,
+            "sent_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+    WARNINGS.appendleft(item)
+    return item
+
+
+@app.get("/warnings")
+def warnings():
+    return list(WARNINGS)
 
 
 @app.get("/")

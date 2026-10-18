@@ -83,6 +83,7 @@ The service runs locally (localhost), nothing is written to disk, and the alert 
 |---|---|---|
 | Warning to the receiver | `receiver_warning` in the result (HIGH/CRITICAL only) | `show_to` = receiver_id for DMs, or "all viewers in the channel" for public chat |
 | Review notice for moderators | `review` (MEDIUM only) | from user feedback (9 of 18 wanted MEDIUM warnings) |
+| Send the warning | `POST /warn {"message_id","receiver_id","channel_id","text"}`, `GET /warnings` | moderator clicks "Send warning"; public chat → shown to everyone, DM → only that receiver. The platform connector delivers it (PP2) |
 | Block a sender | `POST /block {"user_id"}`, `POST /unblock`, `GET /blocked` | component's own block list; a real platform ban needs moderator API access (PP2) |
 | Event for Behavioral Analytics | `behavioral_event` in every result, and `GET /events` (last 500) | `message_id, user_id, receiver_id, channel_id, timestamp, level, score, tactics, patterns, sender_blocked, repeat_offender`; **no raw text** |
 

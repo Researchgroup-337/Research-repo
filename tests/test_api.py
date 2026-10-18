@@ -53,3 +53,11 @@ def test_events_have_no_raw_text():
     client.post("/analyze", json={"text": "free nitro claim now dlscord-gifts.xyz", "user_id": "u2"})
     ev = client.get("/events").json()[0]
     assert "text" not in ev and {"timestamp", "level", "message_id", "receiver_id"} <= set(ev)
+
+
+def test_send_warning_to_receiver():
+    r = client.post("/warn", json={"message_id": "m9", "receiver_id": "u_victim", "text": "Warning: may be a scam"}).json()
+    assert r["show_to"] == "u_victim" and r["sent_at"]
+    pub = client.post("/warn", json={"message_id": "m10", "text": "Warning: may be a scam"}).json()
+    assert pub["show_to"] == "all viewers in the channel"
+    assert client.get("/warnings").json()[0]["message_id"] == "m10"

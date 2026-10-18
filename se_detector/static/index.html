@@ -58,6 +58,8 @@
   .note{font-size:14px;color:var(--crit);font-weight:700}
   .rw{border:1px solid #0B5CAD;background:#EAF2FB;border-radius:8px;padding:12px 14px;margin-bottom:16px}
   .rw b{color:#0B5CAD}
+  button.send{background:#0B5CAD;margin-top:10px} button.sent{background:transparent;color:#0B5CAD;border:1px solid #0B5CAD;cursor:default;margin-top:10px}
+  .msg.sys{background:#EAF2FB;border-left-color:#0B5CAD;cursor:default} .msg.sys .u{color:#0B5CAD}
   .ba{margin-top:18px;border:1px dashed var(--line);border-radius:8px;padding:10px 14px;background:#FAFBFC}
   .ba pre{margin:6px 0 0;font:12.5px Consolas,"DejaVu Sans Mono",monospace;white-space:pre-wrap;word-break:break-word}
   .msg .blk{font-size:11px;font-weight:700;color:var(--crit)}
@@ -165,7 +167,9 @@ function show(id){
         ? `<button class="unblock" data-u="${esc(d.user)}" onclick="toggleBlock(this.dataset.u, false)">Unblock ${esc(d.user)}</button>`
         : `<button class="block" data-u="${esc(d.user)}" onclick="toggleBlock(this.dataset.u, true)">🚫 Block sender (${esc(d.user)})</button>`}
       ${r.behavioral_event.repeat_offender ? `<span class="note">⛔ Blocked sender sent again → reported to Behavioral Analytics as repeat offender</span>` : ""}</div>` : ""}
-    ${r.receiver_warning ? `<div class="rw"><b>📩 WARNING SENT TO ${esc(d.receiver ? d.receiver : "ALL VIEWERS")}</b><br>${esc(r.receiver_warning.text)}</div>` : ""}
+    ${r.receiver_warning ? `<div class="rw"><b>📩 WARNING READY FOR ${esc(d.receiver ? d.receiver : "ALL VIEWERS")}</b><br>${esc(r.receiver_warning.text)}<br>
+      ${d.warned ? `<button class="sent" disabled>✅ Warning sent to ${esc(d.receiver || "all viewers")}</button>`
+                 : `<button class="send" onclick="sendWarning('${id}')">📩 Send warning to ${esc(d.receiver || "all viewers")}</button>`}</div>` : ""}
     ${!r.receiver_warning && d.receiver && lv !== "LOW" ? `<div class="nowarn">No warning sent to ${esc(d.receiver)} yet: ${esc(lv)} messages go to moderator review first (receiver warnings are sent for HIGH / CRITICAL).</div>` : ""}
     ${r.review ? `<div class="review"><b>👁 REVIEW — ${esc(r.review.level)}</b><br>${esc(r.review.summary)}<br>Recommended action: <b>${esc(r.review.recommended_action)}</b></div>` : ""}
     <div class="verdict"><span class="lvl lv-${lv}">${lv}</span>
@@ -178,6 +182,18 @@ function show(id){
     <h3 style="margin-top:18px">What contributed to S = Σ wᵢ·xᵢ</h3>${bars}
     <div class="foot">Phishing probability P = ${r.phishing_probability.toFixed(3)} · URLs forwarded to URL-verification component: ${r.urls.length ? r.urls.map(esc).join(", ") : "none"} · analysed in ${r.latency_ms} ms · model v${esc(r.model_version)}</div>
     <div class="ba"><h3 style="margin:0">→ Forwarded to Behavioral Analytics (Jayarathna) · no message text</h3><pre>${esc(JSON.stringify(r.behavioral_event, null, 2))}</pre></div>`;
+}
+async function sendWarning(id){
+  const d = results[id]; if(!d || d.warned) return;
+  const r = d.res;
+  await fetch("/warn", {method:"POST", headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message_id:id, receiver_id:r.receiver_id, channel_id:r.channel_id, text:r.receiver_warning.text})});
+  d.warned = true;
+  // show the warning in the chat: public -> everyone sees it; DM -> only the receiver gets it
+  const row = document.createElement("div"); row.className = "msg sys";
+  row.innerHTML = `<span class="u">🛡 SafetyBot</span><span class="t"><i>${d.receiver ? `(DM → ${esc(d.receiver)})` : "(to everyone)"}</i> ${esc(r.receiver_warning.text)}</span>`;
+  document.querySelector(`.msg[data-id="${id}"]`)?.after(row);
+  show(id);
 }
 async function toggleBlock(user, on){
   await fetch(on ? "/block" : "/unblock", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({user_id:"u_"+hash(user)})});
