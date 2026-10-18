@@ -1,0 +1,83 @@
+{
+  "n_attacks": 103,
+  "n_benign": 710,
+  "seed": 7,
+  "attacks": {
+    "none (original)": {
+      "no_defence": {
+        "detection_rate": 0.9903,
+        "alert_rate": 0.4563,
+        "mean_severity": 0.5722
+      },
+      "with_defence": {
+        "detection_rate": 0.9903,
+        "alert_rate": 0.4563,
+        "mean_severity": 0.5722
+      }
+    },
+    "homoglyph": {
+      "no_defence": {
+        "detection_rate": 0.6893,
+        "alert_rate": 0.0,
+        "mean_severity": 0.2833
+      },
+      "with_defence": {
+        "detection_rate": 1.0,
+        "alert_rate": 0.6602,
+        "mean_severity": 0.6195
+      }
+    },
+    "invisible": {
+      "no_defence": {
+        "detection_rate": 0.7573,
+        "alert_rate": 0.0097,
+        "mean_severity": 0.2768
+      },
+      "with_defence": {
+        "detection_rate": 1.0,
+        "alert_rate": 0.6602,
+        "mean_severity": 0.6195
+      }
+    },
+    "spacing": {
+      "no_defence": {
+        "detection_rate": 0.9417,
+        "alert_rate": 0.2233,
+        "mean_severity": 0.5015
+      },
+      "with_defence": {
+        "detection_rate": 0.9903,
+        "alert_rate": 0.6214,
+        "mean_severity": 0.5958
+      }
+    },
+    "leetspeak": {
+      "no_defence": {
+        "detection_rate": 0.9903,
+        "alert_rate": 0.4078,
+        "mean_severity": 0.56
+      },
+      "with_defence": {
+        "detection_rate": 0.9903,
+        "alert_rate": 0.4078,
+        "mean_severity": 0.56
+      }
+    },
+    "combined": {
+      "no_defence": {
+        "detection_rate": 0.233,
+        "alert_rate": 0.0,
+        "mean_severity": 0.1308
+      },
+      "with_defence": {
+        "detection_rate": 1.0,
+        "alert_rate": 0.6602,
+        "mean_severity": 0.6195
+      }
+    }
+  },
+  "benign_false_positive_rate": {
+    "no_defence": 0.0239,
+    "with_defence": 0.0239
+  }
+}

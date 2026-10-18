@@ -3,3 +3,5 @@ __pycache__/
 .pytest_cache/
 models/distilbert*/
 .venv/
+logs/
+tests/.audit_test.jsonl

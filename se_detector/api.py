@@ -15,17 +15,30 @@ Endpoints
   POST /warn              moderator sends the prepared warning to the receiver (DM user or whole channel)
   GET  /warnings          warnings sent so far (what the platform connector would deliver)
 
-Security notes (NFR05): input length is capped, nothing is written to disk,
+Access control (security hardening, D.M.T. Dissanayaka):
+  moderator actions (/block, /unblock, /blocked, /warn, /warnings, /alerts, /audit) need the
+  MODERATOR key; /events needs the ANALYTICS key (least privilege: the analytics component can
+  read events but cannot block anyone). Send the key in the "X-API-Key" header.
+  Keys come from the environment variables SE_MODERATOR_KEY / SE_ANALYTICS_KEY; if they are not
+  set, random keys are generated at start-up and printed in the terminal.
+  Every moderator action and every refused request is written to the audit log.
+
+Security notes (NFR05): input length is capped, message text is never written to disk,
 the alert buffer stores only ids + verdicts (not raw message text), and the
 service binds to localhost by default, matching the group's local-processing
 privacy design.
 """
 from __future__ import annotations
 
+import hmac
+import json
+import os
+import secrets
 from collections import deque
+from datetime import datetime, timezone
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException, Request
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
@@ -39,6 +52,45 @@ ALERTS: deque = deque(maxlen=100)
 BLOCKED: set[str] = set()
 EVENTS: deque = deque(maxlen=500)
 WARNINGS: deque = deque(maxlen=200)
+
+# --- access control + audit log (security hardening, D.M.T. Dissanayaka) ---
+def _key(env: str, role: str) -> str:
+    k = os.environ.get(env)
+    if not k:
+        k = secrets.token_urlsafe(12)
+        print(f"[security] {role} key (set {env} to fix it): {k}", flush=True)
+    return k
+
+
+KEYS = {"moderator": _key("SE_MODERATOR_KEY", "MODERATOR"), "analytics": _key("SE_ANALYTICS_KEY", "ANALYTICS")}
+AUDIT: deque = deque(maxlen=1000)
+AUDIT_FILE = Path(os.environ.get("SE_AUDIT_LOG", Path(__file__).resolve().parent.parent / "logs" / "audit.jsonl"))
+
+
+def audit(action: str, role: str | None, ok: bool, request: Request | None = None, **details) -> None:
+    """Record who did what and when. Only ids and actions, never message text."""
+    item = {"time": datetime.now(timezone.utc).isoformat(timespec="seconds"), "action": action,
+            "role": role, "allowed": ok, "client": request.client.host if request and request.client else None} | details
+    AUDIT.appendleft(item)
+    try:
+        AUDIT_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with AUDIT_FILE.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(item) + "\n")
+    except OSError:
+        pass                        # the in-memory audit log still works
+
+
+def require(role: str):
+    """Dependency: the request must carry the key for `role` in the X-API-Key header."""
+    def check(request: Request, x_api_key: str | None = Header(None)) -> str:
+        if x_api_key and hmac.compare_digest(x_api_key, KEYS[role]):          # timing-safe compare
+            return role
+        other = next((r for r, k in KEYS.items() if x_api_key and hmac.compare_digest(x_api_key, k)), None)
+        audit("refused " + request.url.path, other, False, request)
+        if other:                                                             # valid key, wrong role
+            raise HTTPException(status_code=403, detail=f"the {other} key cannot do this")
+        raise HTTPException(status_code=401, detail="missing or wrong API key (X-API-Key header)")
+    return check
 
 
 class Message(BaseModel):
@@ -97,35 +149,37 @@ def analyze_batch(b: Batch):
 
 
 @app.get("/alerts")
-def alerts():
+def alerts(_: str = Depends(require("moderator"))):
     return list(ALERTS)
 
 
 @app.get("/events")
-def events():
+def events(_: str = Depends(require("analytics"))):
     """Behavioral Analytics (Jayarathna) reads this: ids, timestamp, level, tactics. No raw text."""
     return list(EVENTS)
 
 
 @app.post("/block")
-def block(b: BlockRequest):
+def block(b: BlockRequest, request: Request, role: str = Depends(require("moderator"))):
     BLOCKED.add(b.user_id)
+    audit("block", role, True, request, user_id=b.user_id)
     return {"blocked": b.user_id}
 
 
 @app.post("/unblock")
-def unblock(b: BlockRequest):
+def unblock(b: BlockRequest, request: Request, role: str = Depends(require("moderator"))):
     BLOCKED.discard(b.user_id)
+    audit("unblock", role, True, request, user_id=b.user_id)
     return {"unblocked": b.user_id}
 
 
 @app.get("/blocked")
-def blocked():
+def blocked(_: str = Depends(require("moderator"))):
     return sorted(BLOCKED)
 
 
 @app.post("/warn")
-def warn(w: WarnRequest):
+def warn(w: WarnRequest, request: Request, role: str = Depends(require("moderator"))):
     """Send the prepared warning. In the integrated system the platform connector
     (Discord / Twitch / YouTube) delivers it; here it is recorded and shown in the chat."""
     from datetime import datetime, timezone
@@ -133,12 +187,19 @@ def warn(w: WarnRequest):
             "receiver_id": w.receiver_id, "channel_id": w.channel_id, "text": w.text,
             "sent_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
     WARNINGS.appendleft(item)
+    audit("warn", role, True, request, message_id=w.message_id, receiver_id=w.receiver_id)
     return item
 
 
 @app.get("/warnings")
-def warnings():
+def warnings(_: str = Depends(require("moderator"))):
     return list(WARNINGS)
+
+
+@app.get("/audit")
+def audit_log(_: str = Depends(require("moderator"))):
+    """Who blocked / warned whom and when, plus refused requests (possible attacks)."""
+    return list(AUDIT)
 
 
 @app.get("/")

@@ -88,3 +88,12 @@ The service runs locally (localhost), nothing is written to disk, and the alert 
 | Event for Behavioral Analytics | `behavioral_event` in every result, and `GET /events` (last 500) | `message_id, user_id, receiver_id, channel_id, timestamp, level, score, tactics, patterns, sender_blocked, repeat_offender`; **no raw text** |
 
 `repeat_offender` is true when an already-blocked sender sends another message flagged as social engineering.
+
+## Access control (security hardening, 18 Oct 2026)
+Moderator actions (`/block`, `/unblock`, `/blocked`, `/warn`, `/warnings`, `/alerts`, `/audit`) need the **moderator key**;
+`/events` needs the **analytics key** (Jayarathna). Send it as the `X-API-Key` header. Wrong/missing key → 401,
+right key but wrong role → 403. Keys: environment variables `SE_MODERATOR_KEY`, `SE_ANALYTICS_KEY`
+(random keys are printed at start-up if unset). See docs/SECURITY.md.
+
+New attack pattern `evasion_obfuscation`: the message used look-alike letters, invisible characters or spaced-out
+letters to hide words (evidence lists which trick).

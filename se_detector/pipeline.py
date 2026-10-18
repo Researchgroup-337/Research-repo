@@ -41,7 +41,7 @@ class SEDetector:
         c = clean((message or "")[:MAX_CHARS])
         p = float(self.text_model.predict_proba([c.text])[0, 1]) if c.text else 0.0
         m = manipulation.detect(c.text)
-        r = patterns.detect(c.text, c.urls)
+        r = patterns.detect(c.text, c.urls, c.obfuscation)
         x = {"P": p, "U": m["scores"]["urgency"], "A": m["scores"]["authority"],
              "F": m["scores"]["fear"], "R": r["risk"]}
         # Protective advice without a link is a warning, not an attack: damp all signals.

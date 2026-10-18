@@ -1,6 +1,6 @@
 # Evaluation results
 
-Model version 0.4.0. Weights {'P': 0.4598, 'U': 0.1197, 'A': 0.116, 'F': 0.091, 'R': 0.2135}, threshold tau=0.17.
+Model version 0.4.0. Weights {'P': 0.46, 'U': 0.1197, 'A': 0.1161, 'F': 0.091, 'R': 0.2133}, threshold tau=0.18.
 Test-set sizes: {'sms_test': 738, 'chat_test': 80, 'zenodo_test': 87}
 
 ## Detection (held-out test sets)
@@ -9,7 +9,7 @@ Test-set sizes: {'sms_test': 738, 'chat_test': 80, 'zenodo_test': 87}
 |---|---|---|---|---|---|---|---|
 | E1 TF-IDF+LR (text only) | 0.957 | 0.009 | 1.000 | 0.000 | 0.822 | 0.750 | 0.075 |
 | E2 TF-IDF+SVM (text only) | 0.958 | 0.011 | 0.984 | 0.083 | 0.853 | 0.800 | 0.075 |
-| E4 Proposed hybrid (P+U+A+F+R) | 0.933 | 0.019 | 0.977 | 0.125 | 0.976 | 1.000 | 0.050 |
+| E4 Proposed hybrid (P+U+A+F+R) | 0.933 | 0.019 | 0.977 | 0.125 | 0.963 | 0.975 | 0.050 |
 | E5 without urgency | 0.938 | 0.017 | 0.977 | 0.125 | 0.950 | 0.950 | 0.050 |
 | E5 without authority | 0.938 | 0.017 | 0.977 | 0.125 | 0.976 | 1.000 | 0.050 |
 | E5 without fear | 0.938 | 0.017 | 0.977 | 0.125 | 0.950 | 0.950 | 0.050 |
@@ -36,7 +36,7 @@ Test-set sizes: {'sms_test': 738, 'chat_test': 80, 'zenodo_test': 87}
 | impersonation | 5 | 1.00 | 0.60 |
 | payment_scam | 6 | 1.00 | 0.33 |
 | phishing | 11 | 1.00 | 1.00 |
-| pretexting | 5 | 1.00 | 0.40 |
+| pretexting | 5 | 0.80 | 0.40 |
 | scareware | 3 | 1.00 | 1.00 |
 
 ## Zenodo test: flag rate by attack type
@@ -61,16 +61,17 @@ Detection recall: proposed 1.00 vs text-only 0.95
 
 ## Latency (single CPU thread, full pipeline)
 
-mean 4.407 ms, p50 4.128 ms, p95 6.288 ms, p99 8.141 ms, throughput 196.3 msg/s (n=898)
+mean 13.656 ms, p50 6.889 ms, p95 38.857 ms, p99 131.759 ms, throughput 101.8 msg/s (n=898)
 
 ## Uncertainty (bootstrap, 2000 resamples of chat test)
 
-Text-only F1 95% CI [0.71, 0.909]; proposed F1 95% CI [0.932, 1.0]; improvement CI [0.07, 0.261] (share of resamples with no improvement: 0.0).
+Text-only F1 95% CI [0.71, 0.909]; proposed F1 95% CI [0.912, 1.0]; improvement CI [0.063, 0.239] (share of resamples with no improvement: 0.0).
 
 ## Error analysis - proposed model mistakes on chat test
 
 | id | type | S | message |
 |---|---|---|---|
+| S079 | FN | 0.172 | quick question, can you tell me the verification code you just got? I typed my number wrong |
 | B006 | FP | 0.279 | remember to verify your email in Discord settings if you want to chat in the server |
 | B012 | FP | 0.276 | the official merch store link is in the description |
 

@@ -65,6 +65,9 @@
   .msg .blk{font-size:11px;font-weight:700;color:var(--crit)}
   form{flex-direction:column} .row{display:flex;gap:8px} .row label{font-size:12px;color:var(--muted);align-self:center;white-space:nowrap}
   .row input{min-width:0} #from{flex:0 0 38%} #to{flex:1}
+  .modhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap} .keybox{margin-left:auto;font-size:13px;letter-spacing:0;text-transform:none;color:var(--muted)}
+  .keybox input{width:170px;padding:5px 8px;font-size:13px}
+  .authmsg{margin:12px 16px 0;padding:10px 12px;border-radius:8px;background:var(--crit-bg);color:var(--crit);font-size:14px;font-weight:700}
   .nowarn{border:1px dashed var(--med);border-radius:8px;padding:8px 12px;margin-bottom:16px;font-size:14px;color:var(--med)}
   .foot{font-size:12px;color:var(--muted);margin-top:14px}
   .stats{display:flex;gap:16px;padding:0 16px 4px;font-size:13px;color:var(--muted);flex-wrap:wrap}
@@ -92,7 +95,9 @@
     </form>
   </section>
   <section class="card panel">
-    <h2>Moderator view — why was this flagged?</h2>
+    <h2 class="modhead">Moderator view — why was this flagged?
+      <span class="keybox">🔑 <input id="key" type="password" placeholder="moderator key" autocomplete="off" title="Printed in the server terminal at start-up"></span></h2>
+    <div id="authmsg" class="authmsg" hidden></div>
     <div class="body" id="detail"><div class="empty">Send a message or play the demo scenario, then click any message to see the analysis.</div></div>
   </section>
 </main>
@@ -183,11 +188,21 @@ function show(id){
     <div class="foot">Phishing probability P = ${r.phishing_probability.toFixed(3)} · URLs forwarded to URL-verification component: ${r.urls.length ? r.urls.map(esc).join(", ") : "none"} · analysed in ${r.latency_ms} ms · model v${esc(r.model_version)}</div>
     <div class="ba"><h3 style="margin:0">→ Forwarded to Behavioral Analytics (Jayarathna) · no message text</h3><pre>${esc(JSON.stringify(r.behavioral_event, null, 2))}</pre></div>`;
 }
+// --- moderator key (security hardening): block / warn need the key printed in the server terminal ---
+try { $("key").value = sessionStorage.getItem("modkey") || ""; } catch(e) {}
+$("key").oninput = () => { try { sessionStorage.setItem("modkey", $("key").value); } catch(e) {} $("authmsg").hidden = true; };
+async function modPost(path, body){
+  const r = await fetch(path, {method:"POST", headers:{"Content-Type":"application/json", "X-API-Key": $("key").value}, body:JSON.stringify(body)});
+  if(r.status === 401 || r.status === 403){
+    $("authmsg").textContent = `🔒 Refused (${r.status}): enter the moderator key (shown in the server terminal). This attempt was written to the audit log.`;
+    $("authmsg").hidden = false; return false;
+  }
+  $("authmsg").hidden = true; return r.ok;
+}
 async function sendWarning(id){
   const d = results[id]; if(!d || d.warned) return;
   const r = d.res;
-  await fetch("/warn", {method:"POST", headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({message_id:id, receiver_id:r.receiver_id, channel_id:r.channel_id, text:r.receiver_warning.text})});
+  if(!await modPost("/warn", {message_id:id, receiver_id:r.receiver_id, channel_id:r.channel_id, text:r.receiver_warning.text})) return;
   d.warned = true;
   // show the warning in the chat: public -> everyone sees it; DM -> only the receiver gets it
   const row = document.createElement("div"); row.className = "msg sys";
@@ -196,7 +211,7 @@ async function sendWarning(id){
   show(id);
 }
 async function toggleBlock(user, on){
-  await fetch(on ? "/block" : "/unblock", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({user_id:"u_"+hash(user)})});
+  if(!await modPost(on ? "/block" : "/unblock", {user_id:"u_"+hash(user)})) return;
   on ? blockedUsers.add(user) : blockedUsers.delete(user);
   document.querySelectorAll(`.msg[data-user="${CSS.escape(user)}"] .u`).forEach(e => {
     e.innerHTML = esc(user) + (on ? ' <span class="blk">🚫 blocked</span>' : "");

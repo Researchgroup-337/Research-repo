@@ -102,7 +102,7 @@ def url_signals(urls: list[str]) -> dict:
     return {"score": round(1 - math.exp(-total), 4), "reasons": reasons}
 
 
-def detect(text: str, urls: list[str] | None = None) -> dict:
+def detect(text: str, urls: list[str] | None = None, obfuscation: list[str] | None = None) -> dict:
     """Detect SE patterns. ``R`` (risk) combines pattern and URL evidence in [0,1]."""
     urls = urls or []
     # "0.05 BTC": a dot between digits is not a sentence end (added by D.M.T. Dissanayaka)
@@ -117,6 +117,14 @@ def detect(text: str, urls: list[str] | None = None) -> dict:
                 found.setdefault(name, []).append(m.group(0).strip())
                 best = max(best, w)
         total += best
+    # Evasion trick used (homoglyphs, invisible characters, spaced letters): hiding words
+    # from filters is itself a strong sign of an attack (added by D.M.T. Dissanayaka).
+    # Look-alike letters and invisible characters are almost never used by normal users
+    # (0 of 4,943 training/validation messages), so they weigh more than spaced letters,
+    # which do appear in normal messages ("G o o d n i g h t" in the validation set).
+    if obfuscation:
+        found["evasion_obfuscation"] = list(obfuscation)
+        total += max(0.4 if o == "spaced-out letters" else 0.8 for o in obfuscation)
     link = url_signals(urls)
     if link["score"] >= 0.5:
         found["suspicious_link"] = link["reasons"]
