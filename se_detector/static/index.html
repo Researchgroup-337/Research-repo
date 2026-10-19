@@ -146,6 +146,11 @@ async function send(user, text, receiver=""){
     const lv = res.severity.level;
     row.classList.add(lv);
     row.querySelector(".b").className = "b lv-"+lv; row.querySelector(".b").textContent = lv;
+    // keep the page in sync with the server's block list (e.g. after a page refresh)
+    if(res.behavioral_event && res.behavioral_event.sender_blocked && !blockedUsers.has(user)){
+      blockedUsers.add(user); $("st-b").textContent = `${blockedUsers.size} blocked`;
+      row.querySelector(".u").innerHTML = esc(user) + ' <span class="blk">🚫 blocked</span>';
+    }
     latSum += res.latency_ms; if(res.is_social_engineering) flagged++; if(res.alert) alerts++;
     $("st-n").textContent = `${n} messages`; $("st-f").textContent = `${flagged} flagged`;
     $("st-a").textContent = `${alerts} alerts`; $("st-l").textContent = `${(latSum/n).toFixed(1)} ms avg`;

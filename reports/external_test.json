@@ -1,0 +1,57 @@
+{
+  "n": 1055,
+  "hybrid_detection_rate": 0.891,
+  "text_only_detection_rate": 0.8171,
+  "by_category": {
+    "Account Alert": {
+      "n": 305,
+      "hybrid": 0.99,
+      "text_only": 0.951
+    },
+    "Advertisement": {
+      "n": 258,
+      "hybrid": 0.895,
+      "text_only": 0.791
+    },
+    "Delivery": {
+      "n": 177,
+      "hybrid": 0.983,
+      "text_only": 0.966
+    },
+    "Finance/Crypto": {
+      "n": 61,
+      "hybrid": 0.869,
+      "text_only": 0.77
+    },
+    "Job Advertisement": {
+      "n": 24,
+      "hybrid": 0.958,
+      "text_only": 0.75
+    },
+    "Lawsuits/Settlements": {
+      "n": 12,
+      "hybrid": 1.0,
+      "text_only": 0.667
+    },
+    "Loans/Credit": {
+      "n": 4,
+      "hybrid": 0.75,
+      "text_only": 0.75
+    },
+    "Other": {
+      "n": 92,
+      "hybrid": 0.728,
+      "text_only": 0.641
+    },
+    "Prize/Contest": {
+      "n": 57,
+      "hybrid": 1.0,
+      "text_only": 0.86
+    },
+    "Wrong Number/Romance Scam": {
+      "n": 65,
+      "hybrid": 0.277,
+      "text_only": 0.2
+    }
+  }
+}
