@@ -1,0 +1,22 @@
+{
+  "model": "DistilBERT (text only, fine-tuned)",
+  "epochs": 3,
+  "sms_test": {
+    "f1": 0.9681,
+    "recall": 0.9891,
+    "fpr": 0.0077,
+    "n": 738
+  },
+  "zenodo_test": {
+    "f1": 0.992,
+    "recall": 0.9841,
+    "fpr": 0.0,
+    "n": 87
+  },
+  "chat_test": {
+    "f1": 0.8293,
+    "recall": 0.85,
+    "fpr": 0.2,
+    "n": 80
+  }
+}
